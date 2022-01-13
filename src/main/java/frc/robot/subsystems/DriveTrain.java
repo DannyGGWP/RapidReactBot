@@ -10,6 +10,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -41,6 +42,31 @@ public class DriveTrain extends SubsystemBase {
     m_differentialDrive = new DifferentialDrive(m_controllerGroupL, m_controllerGroupR);
 
     m_gyro = new AHRS(Port.kMXP);
+  }
+
+  public double getEncPos() {
+    int encFL = -m_motorFL.getSelectedSensorPosition(0);
+    int encFR = -m_motorFR.getSelectedSensorPosition(0);
+    int encBL = -m_motorBL.getSelectedSensorPosition(0);
+    int encBR = -m_motorBR.getSelectedSensorPosition(0);
+    SmartDashboard.putNumber("Front Left Enc", encFL);
+    SmartDashboard.putNumber("Front Right Enc", encFR);
+    SmartDashboard.putNumber("Back Left Enc", encBL);
+    SmartDashboard.putNumber("Back Right Enc", encBR);
+    
+    double position = (encFL + encFR + encBL + encBR) / 4;
+    return position;
+  }
+
+  public double getHeading() {
+    return Math.IEEEremainder(m_gyro,getAngle(), 360);
+  }
+
+  public void resetEncoders() {
+    m_motorFL.setSelectedSensorPosition(0);
+    m_motorFR.setSelectedSensorPosition(0);
+    m_motorBL.setSelectedSensorPosition(0);
+    m_motorBR.setSelectedSensorPosition(0);
   }
 
   @Override
