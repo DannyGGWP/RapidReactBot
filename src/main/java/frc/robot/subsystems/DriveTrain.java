@@ -45,10 +45,10 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public double getEncPos() {
-    int encFL = -m_motorFL.getSelectedSensorPosition(0);
-    int encFR = m_motorFR.getSelectedSensorPosition(0);
-    int encBL = -m_motorBL.getSelectedSensorPosition(0);
-    int encBR = m_motorBR.getSelectedSensorPosition(0);
+    double encFL = -m_motorFL.getSelectedSensorPosition(0);
+    double encFR = m_motorFR.getSelectedSensorPosition(0);
+    double encBL = -m_motorBL.getSelectedSensorPosition(0);
+    double encBR = m_motorBR.getSelectedSensorPosition(0);
     SmartDashboard.putNumber("Front Left Enc", encFL);
     SmartDashboard.putNumber("Front Right Enc", encFR);
     SmartDashboard.putNumber("Back Left Enc", encBL);
@@ -59,7 +59,7 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public double getHeading() {
-    return Math.IEEEremainder(m_gyro,getAngle(), 360);
+    return Math.IEEEremainder(m_gyro.getAngle(), 360);
   }
 
   public void resetEncoders() {
