@@ -31,10 +31,10 @@ public class DriveTrain extends SubsystemBase {
 
   /** Creates a new DriveTrain. */
   public DriveTrain() {
-    m_motorFR = new WPI_TalonFX(0);
     m_motorFL = new WPI_TalonFX(1);
-    m_motorBR = new WPI_TalonFX(2);
-    m_motorBL = new WPI_TalonFX(3);
+    m_motorBL = new WPI_TalonFX(2);
+    m_motorFR = new WPI_TalonFX(3);
+    m_motorBR = new WPI_TalonFX(4);
 
     m_controllerGroupL = new MotorControllerGroup(m_motorFL, m_motorBL);
     m_controllerGroupR = new MotorControllerGroup(m_motorFR, m_motorBR);
@@ -67,6 +67,10 @@ public class DriveTrain extends SubsystemBase {
     m_motorFR.setSelectedSensorPosition(0);
     m_motorBL.setSelectedSensorPosition(0);
     m_motorBR.setSelectedSensorPosition(0);
+  }
+
+  public void drive(double x, double y) {
+    m_differentialDrive.arcadeDrive(x, y);
   }
 
   @Override
