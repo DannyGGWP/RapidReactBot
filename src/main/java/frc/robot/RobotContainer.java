@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Grabber;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -31,15 +32,15 @@ public class RobotContainer {
 
   private XboxController m_xboxController;
   private DriveTrain m_driveTrain;
-  private PneumaticsControlModule m_pneumatics;
   private Solenoid m_solenoid;
+  private Grabber m_grabber;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     m_xboxController = new XboxController(0);
     m_driveTrain = new DriveTrain();
-    m_pneumatics = new PneumaticsControlModule(52);
-    m_solenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 3);
+    m_solenoid = new Solenoid(Constants.kPCM, PneumaticsModuleType.CTREPCM, 3);
+    m_grabber = new Grabber();
     // Configure the button bindings
     configureButtonBindings();
 

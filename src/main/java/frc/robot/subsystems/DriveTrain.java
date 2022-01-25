@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 
 
@@ -31,10 +32,10 @@ public class DriveTrain extends SubsystemBase {
 
   /** Creates a new DriveTrain. */
   public DriveTrain() {
-    m_motorFL = new WPI_TalonFX(1);
-    m_motorBL = new WPI_TalonFX(2);
-    m_motorFR = new WPI_TalonFX(3);
-    m_motorBR = new WPI_TalonFX(4);
+    m_motorFL = new WPI_TalonFX(Constants.kMotorFL);
+    m_motorBL = new WPI_TalonFX(Constants.kMotorBL);
+    m_motorFR = new WPI_TalonFX(Constants.kMotorFR);
+    m_motorBR = new WPI_TalonFX(Constants.kMotorBR);
 
     m_controllerGroupL = new MotorControllerGroup(m_motorFL, m_motorBL);
     m_controllerGroupR = new MotorControllerGroup(m_motorFR, m_motorBR);
@@ -70,7 +71,7 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void drive(double x, double y) {
-    m_differentialDrive.arcadeDrive(x, y);
+    m_differentialDrive.arcadeDrive(Math.abs(x) > Constants.kDriveThreshold ? x : x * Constants.kDriveReduction, Math.abs(y) > Constants.kDriveThreshold ? y : y * Constants.kDriveReduction);
   }
 
   @Override
