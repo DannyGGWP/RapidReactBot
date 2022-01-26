@@ -32,7 +32,7 @@ public class Grabber extends SubsystemBase {
     m_colorSensor = new ColorSensorV3(Port.kOnboard);
     m_colorMatcher.addColorMatch(Color.kBlue);
     m_colorMatcher.addColorMatch(Color.kRed);
-    m_grabberSensor=new DigitalInput(Constants.Ksenseygrabby);
+    m_grabberSensor = new DigitalInput(Constants.kSenseyGrabby);
   }
 
   @Override
@@ -55,16 +55,15 @@ public class Grabber extends SubsystemBase {
     }
   }
 
-  public void grabbyGrab (boolean grab) {
+  public void grabbyGrab(boolean grab) {
     m_grabbySolenoid.set(grab);
-  
   }
 
   public void raiseGrabber(boolean raise){
     m_pickupSolenoid.set(raise);
   }
 
-  public boolean ballAtGrabber (){
+  public boolean ballAtGrabber(){
     return m_grabberSensor.get();
   }
 }

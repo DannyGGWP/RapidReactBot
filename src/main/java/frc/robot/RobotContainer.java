@@ -32,14 +32,12 @@ public class RobotContainer {
 
   private XboxController m_xboxController;
   private DriveTrain m_driveTrain;
- 
   private Grabber m_grabber;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     m_xboxController = new XboxController(0);
     m_driveTrain = new DriveTrain();
-   
     m_grabber = new Grabber();
     // Configure the button bindings
     configureButtonBindings();
