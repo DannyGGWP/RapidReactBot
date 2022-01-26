@@ -28,7 +28,7 @@ public class Grabber extends SubsystemBase {
   /** Creates a new Grabber. */
   public Grabber() {
     m_grabbySolenoid = new Solenoid(Constants.kPCM, PneumaticsModuleType.CTREPCM, Constants.kGrabbySolenoidIndex);
-    m_pickupSolenoid=new Solenoid (Constants.kPCM, PneumaticsModuleType.CTREPCM, Constants.kPickupSolenoidIndex);
+    m_pickupSolenoid = new Solenoid(Constants.kPCM, PneumaticsModuleType.CTREPCM, Constants.kPickupSolenoidIndex);
     m_colorSensor = new ColorSensorV3(Port.kOnboard);
     m_colorMatcher.addColorMatch(Color.kBlue);
     m_colorMatcher.addColorMatch(Color.kRed);
@@ -55,10 +55,12 @@ public class Grabber extends SubsystemBase {
     }
   }
 
+  /** When true, this closes the grabber */
   public void grabbyGrab(boolean grab) {
     m_grabbySolenoid.set(grab);
   }
-
+  
+  /** When true, this raises the grabber */
   public void raiseGrabber(boolean raise){
     m_pickupSolenoid.set(raise);
   }
