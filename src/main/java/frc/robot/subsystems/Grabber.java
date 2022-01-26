@@ -8,21 +8,31 @@ import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Grabber extends SubsystemBase {
 
   private ColorSensorV3 m_colorSensor;
   private ColorMatch m_colorMatcher = new ColorMatch();
+  private Solenoid m_grabbySolenoid;
+  private Solenoid m_pickupSolenoid;
+  private DigitalInput m_grabberSensor;
 
   /** Creates a new Grabber. */
   public Grabber() {
+    m_grabbySolenoid = new Solenoid(Constants.kPCM, PneumaticsModuleType.CTREPCM, Constants.kGrabbySolenoidIndex);
+    m_pickupSolenoid=new Solenoid (Constants.kPCM, PneumaticsModuleType.CTREPCM, Constants.kPickupSolenoidIndex);
     m_colorSensor = new ColorSensorV3(Port.kOnboard);
     m_colorMatcher.addColorMatch(Color.kBlue);
     m_colorMatcher.addColorMatch(Color.kRed);
+    m_grabberSensor=new DigitalInput(Constants.Ksenseygrabby);
   }
 
   @Override
@@ -43,5 +53,18 @@ public class Grabber extends SubsystemBase {
     } else {
       return "Blue";
     }
+  }
+
+  public void grabbyGrab (boolean grab) {
+    m_grabbySolenoid.set(grab);
+  
+  }
+
+  public void raiseGrabber(boolean raise){
+    m_pickupSolenoid.set(raise);
+  }
+
+  public boolean ballAtGrabber (){
+    return m_grabberSensor.get();
   }
 }

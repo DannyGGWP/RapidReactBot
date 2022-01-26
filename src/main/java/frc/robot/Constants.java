@@ -13,12 +13,16 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static int kMotorFL = 1;
-    public static int kMotorBL = 2;
-    public static int kMotorFR = 3;
-    public static int kMotorBR = 4;
-    public static double kDriveThreshold = 0.9;
-    public static double kDriveReduction = 0.5;
+    public static final int kMotorFL = 1;
+    public static final int kMotorBL = 2;
+    public static final int kMotorFR = 3;
+    public static final int kMotorBR = 4;
+    public static final double kDriveThreshold = 0.9;
+    public static final double kDriveReduction = 0.5;
 
-    public static int kPCM = 52;
+    public static final int kPCM = 52;
+    public static final int kGrabbySolenoidIndex = 3;
+    public static final int kPickupSolenoidIndex = 1;
+    public static final int Ksenseygrabby=1;
 }
+

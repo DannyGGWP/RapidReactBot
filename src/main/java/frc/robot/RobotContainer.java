@@ -7,7 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Solenoid;
+
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.commands.ExampleCommand;
@@ -32,14 +32,14 @@ public class RobotContainer {
 
   private XboxController m_xboxController;
   private DriveTrain m_driveTrain;
-  private Solenoid m_solenoid;
+ 
   private Grabber m_grabber;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     m_xboxController = new XboxController(0);
     m_driveTrain = new DriveTrain();
-    m_solenoid = new Solenoid(Constants.kPCM, PneumaticsModuleType.CTREPCM, 3);
+   
     m_grabber = new Grabber();
     // Configure the button bindings
     configureButtonBindings();
@@ -61,10 +61,10 @@ public class RobotContainer {
   private void configureButtonBindings() {
     new JoystickButton(m_xboxController, Button.kRightBumper.value)
       .whenPressed(
-        () -> m_solenoid.set(true)
+        () -> m_grabber.grabbyGrab(true)
       )
       .whenReleased(
-        () -> m_solenoid.set(false)
+        () -> m_grabber.grabbyGrab(false)
       );
   }
 
