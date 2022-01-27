@@ -64,6 +64,13 @@ public class RobotContainer {
       .whenReleased(
         () -> m_grabber.grabbyGrab(false)
       );
+      new JoystickButton(m_xboxController, Button.kLeftBumper.value)
+      .whenPressed(
+        () -> m_grabber.raiseGrabber(true)
+      )
+      .whenReleased(
+        () -> m_grabber.raiseGrabber(false)
+      );
   }
 
   /**
