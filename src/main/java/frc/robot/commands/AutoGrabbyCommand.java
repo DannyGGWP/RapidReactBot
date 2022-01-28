@@ -1,0 +1,92 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+package frc.robot.commands;
+
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.Grabber;
+
+public class AutoGrabbyCommand extends CommandBase {
+
+  private enum states {
+    START,
+    LOWERARMS,
+    CLOSEGRABBER,
+    RAISEARMS,
+    OPENGRABBER,
+    END
+  }
+  private states currentState;
+  private double timestamp;
+  private Grabber m_grabber;
+
+  /** Creates a new AutoGrabbyCommand. */
+  public AutoGrabbyCommand(Grabber grabber) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    currentState = states.START;
+    timestamp = 0;
+    m_grabber = grabber;
+    addRequirements(m_grabber);
+  }
+
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {}
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    switch(currentState) {
+      case START: {
+        currentState = states.LOWERARMS;
+        timestamp = Timer.getFPGATimestamp();
+        break;
+      }
+      case LOWERARMS: {
+        m_grabber.lowerGrabber(true);
+        if (Timer.getFPGATimestamp() > timestamp + 1 && m_grabber.canPickup()) {
+          currentState = states.CLOSEGRABBER;
+          timestamp = Timer.getFPGATimestamp();
+        }
+        break;
+      }
+      case CLOSEGRABBER: {
+        m_grabber.grabbyGrab(true);
+        if (Timer.getFPGATimestamp() > timestamp + 0.5) {
+          currentState = states.RAISEARMS;
+          timestamp = Timer.getFPGATimestamp();
+        }
+        break;
+      }
+      case RAISEARMS: {
+        m_grabber.lowerGrabber(false);
+        if (Timer.getFPGATimestamp() > timestamp + 1) {
+          currentState = states.OPENGRABBER;
+        }
+        break;
+      }
+      case OPENGRABBER: {
+        m_grabber.grabbyGrab(false);
+        currentState = states.END;
+        break;
+      }
+      case END: {}
+    }
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    m_grabber.grabbyGrab(false);
+    m_grabber.lowerGrabber(false);
+  }
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return currentState == states.END;
+  }
+}

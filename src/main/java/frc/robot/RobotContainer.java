@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import frc.robot.commands.AutoGrabbyCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -32,7 +33,7 @@ public class RobotContainer {
 
   private XboxController m_xboxController;
   private DriveTrain m_driveTrain;
-  private Grabber m_grabber;
+  public Grabber m_grabber;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -58,19 +59,21 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(m_xboxController, Button.kRightBumper.value)
+        .whenPressed(
+          () -> m_grabber.grabbyGrab(true)
+        )
+        .whenReleased(
+          () -> m_grabber.grabbyGrab(false)
+        );
+    new JoystickButton(m_xboxController, Button.kLeftBumper.value)
       .whenPressed(
-        () -> m_grabber.grabbyGrab(true)
+        () -> m_grabber.lowerGrabber(true)
       )
       .whenReleased(
-        () -> m_grabber.grabbyGrab(false)
+        () -> m_grabber.lowerGrabber(false)
       );
-      new JoystickButton(m_xboxController, Button.kLeftBumper.value)
-      .whenPressed(
-        () -> m_grabber.raiseGrabber(true)
-      )
-      .whenReleased(
-        () -> m_grabber.raiseGrabber(false)
-      );
+    new JoystickButton(m_xboxController, Button.kA.value)
+      .whileActiveOnce(new AutoGrabbyCommand(m_grabber));
   }
 
   /**

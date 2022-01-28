@@ -67,8 +67,8 @@ public class Grabber extends SubsystemBase {
     m_grabbySolenoid.set(grab);
   }
   
-  /** When true, this raises the grabber */
-  public void raiseGrabber(boolean raise){
+  /** When true, this lowers the grabber */
+  public void lowerGrabber(boolean raise){
     m_pickupSolenoid.set(raise);
   }
 

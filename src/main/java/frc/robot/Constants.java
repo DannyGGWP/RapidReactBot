@@ -25,8 +25,8 @@ public final class Constants {
     /** Drive motor speed is multiplied by this value */                                               
     public static final double kDriveReduction = 0.5;
     
-    public static final int kGrabbySolenoidIndex = 3;
-    public static final int kPickupSolenoidIndex = 1;
-    public static final int kSenseyGrabby = 1;
+    public static final int kGrabbySolenoidIndex = 5;
+    public static final int kPickupSolenoidIndex = 7;
+    public static final int kSenseyGrabby = 9;
 }
 
