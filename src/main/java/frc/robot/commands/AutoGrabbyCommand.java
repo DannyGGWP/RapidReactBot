@@ -4,7 +4,9 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Grabber;
@@ -26,7 +28,6 @@ public class AutoGrabbyCommand extends CommandBase {
   /** Creates a new AutoGrabbyCommand. */
   public AutoGrabbyCommand(Grabber grabber) {
     // Use addRequirements() here to declare subsystem dependencies.
-    currentState = states.START;
     timestamp = 0;
     m_grabber = grabber;
     addRequirements(m_grabber);
@@ -34,7 +35,10 @@ public class AutoGrabbyCommand extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    currentState = states.START;
+    m_grabber.setIsRedAlliance(DriverStation.getAlliance() == Alliance.Red);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

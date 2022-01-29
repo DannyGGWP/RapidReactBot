@@ -26,6 +26,7 @@ public final class Constants {
     public static final double kDriveReduction = 0.5;
     
     public static final int kGrabbySolenoidIndex = 5;
+    public static final int kShootySolenoidIndex = 6;
     public static final int kPickupSolenoidIndex = 7;
     public static final int kSenseyGrabby = 9;
 }
