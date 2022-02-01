@@ -31,6 +31,7 @@ private Solenoid m_shootySolenoid;
 public Shooter(){
 
   shooterMotor = new CANSparkMax(Constants.shooterSpark, MotorType.kBrushless);
+  shooterMotor.setInverted(true);
   m_pPidController = shooterMotor.getPIDController();
   kP = 5e-5;
   kI = 3e-7;
@@ -38,7 +39,7 @@ public Shooter(){
   kIZ = 0;
   kFF = 0;
   kMaxOutput = 1;
-  kMinOutput = 1;
+  kMinOutput = -1;
   kMaxRPM = 5700; 
   m_pPidController.setP(kP);
   m_pPidController.setI(kI);
