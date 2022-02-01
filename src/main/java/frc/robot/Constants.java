@@ -23,6 +23,7 @@ public final class Constants {
     public static final int kPCM = 52;
     public static final int kGrabbySolenoidIndex = 3;
     public static final int kPickupSolenoidIndex = 1;
-    public static final int Ksenseygrabby=1;
+    public static final int Ksenseygrabby = 1;
+    public static final int shooterSpark = 7;
 }
 
