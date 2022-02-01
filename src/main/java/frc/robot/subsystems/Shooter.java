@@ -12,6 +12,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
+
+
+
 
 /** Add your docs here. */
 public class Shooter extends SubsystemBase {
@@ -21,6 +26,7 @@ public class Shooter extends SubsystemBase {
 private CANSparkMax shooterMotor; 
 private SparkMaxPIDController m_pPidController;
 public double kP,kI,kD,kIZ, kFF,kMaxOutput, kMinOutput, kMaxRPM;
+private Solenoid m_shootySolenoid;
 
 public Shooter(){
 
@@ -40,6 +46,7 @@ public Shooter(){
   m_pPidController.setIZone(kIZ);
   m_pPidController.setFF(kFF);
   m_pPidController.setOutputRange(kMinOutput, kMaxOutput);
+  m_shootySolenoid=new Solenoid (Constants.kPCM, PneumaticsModuleType.CTREPCM, Constants.kShootySolenoidIndex);
 }
   @Override 
   public void periodic(){}
@@ -47,6 +54,11 @@ public Shooter(){
 public void simulationPeriodic() {
   // TODO Auto-generated method stub
   super.simulationPeriodic();
+  
 
+}
+
+public void shootyShoot(boolean shotta){
+  m_shootySolenoid.set(shotta);
 }
 }

@@ -9,6 +9,7 @@ import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.I2C.Port;
@@ -24,21 +25,28 @@ public class Grabber extends SubsystemBase {
   private Solenoid m_grabbySolenoid;
   private Solenoid m_pickupSolenoid;
   private DigitalInput m_grabberSensor;
+  private boolean m_isRedAlliance;
 
   /** Creates a new Grabber. */
   public Grabber() {
     m_grabbySolenoid = new Solenoid(Constants.kPCM, PneumaticsModuleType.CTREPCM, Constants.kGrabbySolenoidIndex);
-    m_pickupSolenoid=new Solenoid (Constants.kPCM, PneumaticsModuleType.CTREPCM, Constants.kPickupSolenoidIndex);
+    m_pickupSolenoid = new Solenoid(Constants.kPCM, PneumaticsModuleType.CTREPCM, Constants.kPickupSolenoidIndex);
     m_colorSensor = new ColorSensorV3(Port.kOnboard);
     m_colorMatcher.addColorMatch(Color.kBlue);
     m_colorMatcher.addColorMatch(Color.kRed);
-    m_grabberSensor=new DigitalInput(Constants.Ksenseygrabby);
+    m_grabberSensor = new DigitalInput(Constants.kSenseyGrabby);
+    m_isRedAlliance = DriverStation.getAlliance() == DriverStation.Alliance.Red;
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putString("Color", stringColor());
+    SmartDashboard.putBoolean("Ball Present", m_grabberSensor.get());
+  }
+
+  public void setIsRedAlliance(boolean red) {
+    m_isRedAlliance = red;
   }
 
   public String stringColor() {
@@ -55,16 +63,31 @@ public class Grabber extends SubsystemBase {
     }
   }
 
-  public void grabbyGrab (boolean grab) {
-    m_grabbySolenoid.set(grab);
-  
+  private boolean isBallRed() {
+    return stringColor().equals("Red");
   }
 
-  public void raiseGrabber(boolean raise){
+  /** When true, this closes the grabber */
+  public void grabbyGrab(boolean grab) {
+    m_grabbySolenoid.set(grab);
+  }
+  
+  /** When true, this lowers the grabber */
+  public void lowerGrabber(boolean raise){
     m_pickupSolenoid.set(raise);
   }
 
-  public boolean ballAtGrabber (){
+  public boolean ballAtGrabber(){
     return m_grabberSensor.get();
   }
+
+  public boolean canPickup() {
+    if (m_isRedAlliance == isBallRed() && ballAtGrabber()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  
+
 }

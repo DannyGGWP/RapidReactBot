@@ -10,10 +10,12 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import frc.robot.commands.AutoGrabbyCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Grabber;
+import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -32,15 +34,17 @@ public class RobotContainer {
 
   private XboxController m_xboxController;
   private DriveTrain m_driveTrain;
- 
-  private Grabber m_grabber;
+  public Grabber m_grabber;
+  public Shooter m_shooter;
+  public AutoGrabbyCommand m_grabCommand;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    m_shooter = new Shooter();
     m_xboxController = new XboxController(0);
     m_driveTrain = new DriveTrain();
-   
     m_grabber = new Grabber();
+    m_grabCommand = new AutoGrabbyCommand(m_grabber);
     // Configure the button bindings
     configureButtonBindings();
 
@@ -60,11 +64,28 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(m_xboxController, Button.kRightBumper.value)
+        .whenPressed(
+          () -> m_grabber.grabbyGrab(true)
+        )
+        .whenReleased(
+          () -> m_grabber.grabbyGrab(false)
+        );
+    new JoystickButton(m_xboxController, Button.kLeftBumper.value)
       .whenPressed(
-        () -> m_grabber.grabbyGrab(true)
+        () -> m_grabber.lowerGrabber(true)
       )
       .whenReleased(
-        () -> m_grabber.grabbyGrab(false)
+        () -> m_grabber.lowerGrabber(false)
+      );
+    new JoystickButton(m_xboxController, Button.kA.value)
+      .whileActiveOnce(m_grabCommand);
+
+      new JoystickButton(m_xboxController, Button.kX.value)
+      .whenPressed(
+        () -> m_shooter.shootyShoot(true)
+      )
+      .whenReleased(
+        () -> m_shooter.shootyShoot(false)
       );
   }
 
