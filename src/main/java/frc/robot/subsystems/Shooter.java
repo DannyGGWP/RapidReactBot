@@ -5,9 +5,9 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -57,7 +57,16 @@ public void simulationPeriodic() {
   
 
 }
-
+public void onWheel(){
+  m_pPidController.setReference(Constants.ksetPoint, ControlType.kVelocity);
+}
+public void offWheel(){
+  shooterMotor.stopMotor();
+}
+public double wheelSpin(){
+  // TODO figure out methods
+  return shooterMotor.getEncoder().getVelocity();
+}
 public void shootyShoot(boolean shotta){
   m_shootySolenoid.set(shotta);
 }

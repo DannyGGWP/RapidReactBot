@@ -87,6 +87,13 @@ public class RobotContainer {
       .whenReleased(
         () -> m_shooter.shootyShoot(false)
       );
+      new JoystickButton(m_xboxController, Button.kY.value)
+      .whenPressed(
+        () -> m_shooter.onWheel()
+      )
+      .whenReleased(
+        () -> m_shooter.offWheel()
+      );
   }
 
   /**

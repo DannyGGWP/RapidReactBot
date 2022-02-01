@@ -31,5 +31,6 @@ public final class Constants {
     public static final int kShootySolenoidIndex = 6;
     public static final int kPickupSolenoidIndex = 7;
     public static final int kSenseyGrabby = 9;
+    public static final int ksetPoint = 4800; 
 }
 
