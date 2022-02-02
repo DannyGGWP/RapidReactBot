@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 
@@ -27,6 +29,7 @@ private CANSparkMax shooterMotor;
 private SparkMaxPIDController m_pPidController;
 public double kP,kI,kD,kIZ, kFF,kMaxOutput, kMinOutput, kMaxRPM;
 private Solenoid m_shootySolenoid;
+private DigitalInput m_shooterSensor;
 
 public Shooter(){
 
@@ -47,28 +50,35 @@ public Shooter(){
   m_pPidController.setIZone(kIZ);
   m_pPidController.setFF(kFF);
   m_pPidController.setOutputRange(kMinOutput, kMaxOutput);
-  m_shootySolenoid=new Solenoid (Constants.kPCM, PneumaticsModuleType.CTREPCM, Constants.kShootySolenoidIndex);
+  m_shootySolenoid = new Solenoid(Constants.kPCM, PneumaticsModuleType.CTREPCM, Constants.kShootySolenoidIndex);
+  m_shooterSensor = new DigitalInput(Constants.kSenseyShooty);
 }
   @Override 
   public void periodic(){}
-@Override
-public void simulationPeriodic() {
-  // TODO Auto-generated method stub
-  super.simulationPeriodic();
-  
+  @Override
+  public void simulationPeriodic() {
+    // TODO Auto-generated method stub
+    super.simulationPeriodic();
+  }
 
-}
-public void onWheel(){
-  m_pPidController.setReference(Constants.ksetPoint, ControlType.kVelocity);
-}
-public void offWheel(){
-  shooterMotor.stopMotor();
-}
-public double wheelSpin(){
-  // TODO figure out methods
-  return shooterMotor.getEncoder().getVelocity();
-}
-public void shootyShoot(boolean shotta){
-  m_shootySolenoid.set(shotta);
-}
+  public void onWheel(){
+    m_pPidController.setReference(Constants.kSetPoint, ControlType.kVelocity);
+  }
+
+  public void offWheel(){
+    shooterMotor.stopMotor();
+  }
+
+  public double wheelSpin(){
+    // TODO figure out methods
+    return shooterMotor.getEncoder().getVelocity();
+  }
+
+  public void raiseTOT(boolean raise){
+    m_shootySolenoid.set(raise);
+  }
+
+  public boolean isBallReady() {
+    return m_shooterSensor.get();
+  }
 }

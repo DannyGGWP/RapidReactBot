@@ -4,43 +4,41 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
+import frc.robot.Constants;
 import frc.robot.subsystems.Grabber;
 import frc.robot.subsystems.Shooter;
 
-public class AutoGrabbyCommand extends CommandBase {
+public class ShootyCommand extends CommandBase {
 
   private enum states {
     START,
-    LOWERARMS,
-    CLOSEGRABBER,
-    RAISEARMS,
-    OPENGRABBER,
+    RAMPWHEEL,
+    RAISETOT,
+    LOWERTOT,
+    RELEASEBALL,
     END
   }
+
   private states currentState;
   private double timestamp;
-  private Grabber m_grabber;
   private Shooter m_shooter;
+  private Grabber m_grabber;
 
-  /** Creates a new AutoGrabbyCommand. */
-  public AutoGrabbyCommand(Grabber grabber, Shooter shooter) {
+  /** Creates a new ShootyCommand. */
+  public ShootyCommand(Shooter shooter, Grabber grabber) {
     // Use addRequirements() here to declare subsystem dependencies.
     timestamp = 0;
-    m_grabber = grabber;
     m_shooter = shooter;
-    addRequirements(m_grabber, m_shooter);
+    m_grabber = grabber;
+    addRequirements(m_shooter, m_grabber);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     currentState = states.START;
-    m_grabber.setIsRedAlliance(DriverStation.getAlliance() == Alliance.Red);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -48,38 +46,41 @@ public class AutoGrabbyCommand extends CommandBase {
   public void execute() {
     switch(currentState) {
       case START: {
-        currentState = states.LOWERARMS;
-        timestamp = Timer.getFPGATimestamp();
+        if (m_shooter.isBallReady()) {
+          currentState = states.RAMPWHEEL;
+        }
         break;
       }
-      case LOWERARMS: {
-        m_grabber.lowerGrabber(true);
-        if (Timer.getFPGATimestamp() > timestamp + 1 && m_grabber.canPickup()) {
-          currentState = states.CLOSEGRABBER;
+      case RAMPWHEEL: {
+        m_shooter.onWheel();
+        if (m_shooter.wheelSpin() > Constants.kSetPoint - 100) {
           timestamp = Timer.getFPGATimestamp();
+          currentState = states.RAISETOT;
         }
         break;
       }
-      case CLOSEGRABBER: {
-        m_grabber.grabbyGrab(true);
-        if (Timer.getFPGATimestamp() > timestamp + 0.5) {
-          currentState = states.RAISEARMS;
+      case RAISETOT: {
+        m_shooter.raiseTOT(true);
+        if (Timer.getFPGATimestamp() > timestamp + 2) {
           timestamp = Timer.getFPGATimestamp();
+          currentState = states.LOWERTOT;
         }
         break;
       }
-      case RAISEARMS: {
-        m_grabber.lowerGrabber(false);
-        if (Timer.getFPGATimestamp() > timestamp + 1) {
-          currentState = states.OPENGRABBER;
+      case LOWERTOT: {
+        m_shooter.raiseTOT(false);
+        if (Timer.getFPGATimestamp() > timestamp + 2) {
+          if (!m_shooter.isBallReady() && m_grabber.ballAtGrabber()) {
+            currentState = states.RELEASEBALL;
+          } else {
+            currentState = states.END;
+          }
         }
         break;
       }
-      case OPENGRABBER: {
-        if (!m_shooter.isBallReady()) {
-          m_grabber.grabbyGrab(false);
-        }
-        currentState = states.END;
+      case RELEASEBALL: {
+        m_grabber.grabbyGrab(false);
+        currentState = states.START;
         break;
       }
       case END: {}
@@ -89,8 +90,8 @@ public class AutoGrabbyCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    //m_grabber.grabbyGrab(false);
-    m_grabber.lowerGrabber(false);
+    m_shooter.offWheel();
+    m_shooter.raiseTOT(false);
   }
 
   // Returns true when the command should end.

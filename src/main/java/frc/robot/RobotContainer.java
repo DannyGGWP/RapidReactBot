@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.commands.AutoGrabbyCommand;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.ShootyCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Grabber;
@@ -37,6 +38,7 @@ public class RobotContainer {
   public Grabber m_grabber;
   public Shooter m_shooter;
   public AutoGrabbyCommand m_grabCommand;
+  public ShootyCommand m_shootyCommand;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -44,7 +46,8 @@ public class RobotContainer {
     m_xboxController = new XboxController(0);
     m_driveTrain = new DriveTrain();
     m_grabber = new Grabber();
-    m_grabCommand = new AutoGrabbyCommand(m_grabber);
+    m_grabCommand = new AutoGrabbyCommand(m_grabber, m_shooter);
+    m_shootyCommand = new ShootyCommand(m_shooter, m_grabber);
     // Configure the button bindings
     configureButtonBindings();
 
@@ -79,21 +82,23 @@ public class RobotContainer {
       );
     new JoystickButton(m_xboxController, Button.kA.value)
       .whileActiveOnce(m_grabCommand);
+    new JoystickButton(m_xboxController, Button.kB.value)
+      .whileActiveOnce(m_shootyCommand);
 
-      new JoystickButton(m_xboxController, Button.kX.value)
-      .whenPressed(
-        () -> m_shooter.shootyShoot(true)
-      )
-      .whenReleased(
-        () -> m_shooter.shootyShoot(false)
-      );
-      new JoystickButton(m_xboxController, Button.kY.value)
-      .whenPressed(
-        () -> m_shooter.onWheel()
-      )
-      .whenReleased(
-        () -> m_shooter.offWheel()
-      );
+    new JoystickButton(m_xboxController, Button.kX.value)
+    .whenPressed(
+      () -> m_shooter.raiseTOT(true)
+    )
+    .whenReleased(
+      () -> m_shooter.raiseTOT(false)
+    );
+    new JoystickButton(m_xboxController, Button.kY.value)
+    .whenPressed(
+      () -> m_shooter.onWheel()
+    )
+    .whenReleased(
+      () -> m_shooter.offWheel()
+    );
   }
 
   /**
