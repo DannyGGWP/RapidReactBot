@@ -92,6 +92,7 @@ public class ShootyCommand extends CommandBase {
   public void end(boolean interrupted) {
     m_shooter.offWheel();
     m_shooter.raiseTOT(false);
+    currentState = states.END;
   }
 
   // Returns true when the command should end.

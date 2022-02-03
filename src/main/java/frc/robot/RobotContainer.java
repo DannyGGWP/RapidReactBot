@@ -9,8 +9,10 @@ import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.commands.AutoGrabbyCommand;
+import frc.robot.commands.EjectBallCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ShootyCommand;
 import frc.robot.subsystems.DriveTrain;
@@ -84,6 +86,8 @@ public class RobotContainer {
       .whileActiveOnce(m_grabCommand);
     new JoystickButton(m_xboxController, Button.kB.value)
       .whileActiveOnce(m_shootyCommand);
+    new JoystickButton(m_xboxController, Button.kBack.value)
+      .whileActiveOnce(new EjectBallCommand(m_shooter, m_grabber));
 
     new JoystickButton(m_xboxController, Button.kX.value)
     .whenPressed(

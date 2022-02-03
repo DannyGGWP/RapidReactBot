@@ -20,18 +20,21 @@ public final class Constants {
     public static final int kMotorBR = 4;
     public static final int kPCM = 52;
     public static final int Ksenseygrabby = 1;
-    public static final int shooterSpark = 7;
+    public static final int kshooterSpark = 7;
 
     /** The upper limit at which the drive will stop using kDriveReduction */
     public static final double kDriveThreshold = 0.9;
     /** Drive motor speed is multiplied by this value */                                               
-    public static final double kDriveReduction = 0.5;
+    public static final double kDriveReduction = 0.75;
     
     public static final int kGrabbySolenoidIndex = 5;
     public static final int kShootySolenoidIndex = 6;
     public static final int kPickupSolenoidIndex = 7;
     public static final int kSenseyGrabby = 0;
     public static final int kSenseyShooty = 1;
-    public static final int kSetPoint = 1500; 
+    public static final int kSetPoint = 1500;
+    public static final int kreverseSetPoint = -1000;
+    public static final int kslowSpeed = 1500;
+    
 }
 

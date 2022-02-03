@@ -41,6 +41,7 @@ public class DriveTrain extends SubsystemBase {
     m_controllerGroupR = new MotorControllerGroup(m_motorFR, m_motorBR);
 
     m_differentialDrive = new DifferentialDrive(m_controllerGroupL, m_controllerGroupR);
+    m_differentialDrive.setDeadband(0.05);
 
     m_gyro = new AHRS(Port.kMXP);
   }
@@ -71,7 +72,7 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void drive(double x, double y) {
-    m_differentialDrive.arcadeDrive(Math.abs(x) > Constants.kDriveThreshold ? x : x * Constants.kDriveReduction, Math.abs(y) > Constants.kDriveThreshold ? y : y * Constants.kDriveReduction);
+    m_differentialDrive.arcadeDrive(Math.abs(x) < Constants.kDriveThreshold ? x : Constants.kDriveReduction, Math.abs(y) < Constants.kDriveThreshold ? y : Constants.kDriveReduction);
   }
 
   @Override

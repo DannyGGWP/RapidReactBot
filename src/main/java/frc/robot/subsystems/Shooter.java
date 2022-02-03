@@ -33,7 +33,7 @@ private DigitalInput m_shooterSensor;
 
 public Shooter(){
 
-  shooterMotor = new CANSparkMax(Constants.shooterSpark, MotorType.kBrushless);
+  shooterMotor = new CANSparkMax(Constants.kshooterSpark, MotorType.kBrushless);
   shooterMotor.setInverted(true);
   m_pPidController = shooterMotor.getPIDController();
   kP = 5e-5;
@@ -80,5 +80,8 @@ public Shooter(){
 
   public boolean isBallReady() {
     return m_shooterSensor.get();
+  }
+  public void reverse(){
+    m_pPidController.setReference(Constants.kreverseSetPoint, ControlType.kVelocity);
   }
 }
