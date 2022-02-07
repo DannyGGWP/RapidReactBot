@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -30,6 +31,8 @@ public class DriveTrain extends SubsystemBase {
 
   public AHRS m_gyro;
 
+  private final DifferentialDriveOdometry m_odometry; 
+
   /** Creates a new DriveTrain. */
   public DriveTrain() {
     m_motorFL = new WPI_TalonFX(Constants.kMotorFL);
@@ -44,6 +47,8 @@ public class DriveTrain extends SubsystemBase {
     m_differentialDrive.setDeadband(0.05);
 
     m_gyro = new AHRS(Port.kMXP);
+    resetEncoders();
+    m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
   }
 
   public double getEncPos() {
