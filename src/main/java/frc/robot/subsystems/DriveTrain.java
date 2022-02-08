@@ -4,15 +4,20 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.ConversionHelper;
 import frc.robot.Constants;
 
 
@@ -39,7 +44,8 @@ public class DriveTrain extends SubsystemBase {
     m_motorBL = new WPI_TalonFX(Constants.kMotorBL);
     m_motorFR = new WPI_TalonFX(Constants.kMotorFR);
     m_motorBR = new WPI_TalonFX(Constants.kMotorBR);
-
+    m_motorBL.follow(m_motorFL);
+    m_motorBR.follow(m_motorFR);
     m_controllerGroupL = new MotorControllerGroup(m_motorFL, m_motorBL);
     m_controllerGroupR = new MotorControllerGroup(m_motorFR, m_motorBR);
 
@@ -65,10 +71,16 @@ public class DriveTrain extends SubsystemBase {
     return position;
   }
 
+public void resetHeading(){
+  m_gyro.reset();
+}
+
   public double getHeading() {
     return Math.IEEEremainder(m_gyro.getAngle(), 360);
   }
-
+  public double getTurnRate(){
+    return m_gyro.getRate(); 
+  }
   public void resetEncoders() {
     m_motorFL.setSelectedSensorPosition(0);
     m_motorFR.setSelectedSensorPosition(0);
@@ -79,7 +91,24 @@ public class DriveTrain extends SubsystemBase {
   public void drive(double x, double y) {
     m_differentialDrive.arcadeDrive(Math.abs(x) < Constants.kDriveThreshold ? x : Constants.kDriveReduction, Math.abs(y) < Constants.kDriveThreshold ? y : Constants.kDriveReduction);
   }
-
+  public void driveVelocity(double left, double right){
+    double leftNativeVel = ConversionHelper.convertWPILibTrajectoryUnitsToTalonSRXNativeUnits(left, Constants.kWheelDiameter, true, Constants.kTicksPerRevolution); 
+    double rightNativeVel = ConversionHelper.convertWPILibTrajectoryUnitsToTalonSRXNativeUnits(right, Constants.kWheelDiameter, true, Constants.kTicksPerRevolution); 
+    this.m_motorFR.set(ControlMode.Velocity, rightNativeVel);
+    this.m_motorFL.set(ControlMode.Velocity, leftNativeVel);
+    SmartDashboard.putNumber("Left Target Vel", leftNativeVel);
+    SmartDashboard.putNumber("Left Target Vs Actual", leftNativeVel-this.m_motorFL.getSelectedSensorVelocity()); 
+  }
+  public DifferentialDriveWheelSpeeds getWheelSpeeds(){
+    return new DifferentialDriveWheelSpeeds(
+      ConversionHelper.convertTalonNativeToWPITrajectoryUnits(this.m_motorFL.getSelectedSensorVelocity(), Constants.kWheelDiameter, true, Constants.kTicksPerRevolution),
+      ConversionHelper.convertTalonNativeToWPITrajectoryUnits(this.m_motorFR.getSelectedSensorVelocity(), Constants.kWheelDiameter, true, Constants.kTicksPerRevolution)
+      );
+  }
+  public void resetOdometry(Pose2d pose){
+    resetEncoders();
+    m_odometry.resetPosition(pose, Rotation2d.fromDegrees(getHeading()));
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

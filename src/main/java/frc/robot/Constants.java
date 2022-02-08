@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import frc.ConversionHelper;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -35,6 +37,8 @@ public final class Constants {
     public static final int kSetPoint = 1500;
     public static final int kreverseSetPoint = -1000;
     public static final int kslowSpeed = 1500;
+    public static final double kWheelDiameter = ConversionHelper.convertFeetToMeters(0.50);
+    public static final int kTicksPerRevolution = (int) ((int) 4096.0*10.71);
     
 }
 
