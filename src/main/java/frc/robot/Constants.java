@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import frc.ConversionHelper;
 
 /**
@@ -37,8 +38,26 @@ public final class Constants {
     public static final int kSetPoint = 1500;
     public static final int kreverseSetPoint = -1000;
     public static final int kslowSpeed = 1500;
-    public static final double kWheelDiameter = ConversionHelper.convertFeetToMeters(0.50);
-    public static final int kTicksPerRevolution = (int) ((int) 4096.0*10.71);
+    public final class DTConsts {
+        public static final double kWheelDiameter = 0.50; // Feet 
+        public static final double kTrackWidth = 0.0;
+        public static final int kTicksPerRevolution = (int)(4096.0*10.71);
+        public static final double RAMSETE_B = 2;
+        public static final double RAMSETE_ZETA = 0.7;
+        public static final double KS = 0;
+        public static final double KV = 0;
+        public static final double KA = 0;
+        public static final double MAX_VELOCITY = 0;
+        public static final double MAX_ACCELERATION = 0;
+        public static final double kD = 0.0; 
+        public static final double kP = 0.0; 
+        public static final double kI = 0.0; 
+        public static final double kFF = 0.0; 
+        public static final int kTimeOut = 10; 
+        public static final int kClosedLoopError = 0; 
+        public static final int kStatusFrame = 10; 
+    }
+    public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(DTConsts.kTrackWidth);
     
 }
 

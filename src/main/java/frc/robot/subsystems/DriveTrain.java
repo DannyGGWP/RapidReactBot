@@ -5,6 +5,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -44,8 +46,43 @@ public class DriveTrain extends SubsystemBase {
     m_motorBL = new WPI_TalonFX(Constants.kMotorBL);
     m_motorFR = new WPI_TalonFX(Constants.kMotorFR);
     m_motorBR = new WPI_TalonFX(Constants.kMotorBR);
+
+    // define closed loop for motors 
+    m_motorFR.config_kD(0, Constants.DTConsts.kD, Constants.DTConsts.kTimeOut);
+    m_motorFR.config_kF(0, Constants.DTConsts.kFF, Constants.DTConsts.kTimeOut); 
+    m_motorFR.config_kI(0, Constants.DTConsts.kI, Constants.DTConsts.kTimeOut); 
+    m_motorFR.config_kP(0, Constants.DTConsts.kP, Constants.DTConsts.kTimeOut); 
+
+    m_motorBR.config_kD(0, Constants.DTConsts.kD, Constants.DTConsts.kTimeOut);
+    m_motorBR.config_kF(0, Constants.DTConsts.kFF, Constants.DTConsts.kTimeOut); 
+    m_motorBR.config_kI(0, Constants.DTConsts.kI, Constants.DTConsts.kTimeOut); 
+    m_motorBR.config_kP(0, Constants.DTConsts.kP, Constants.DTConsts.kTimeOut); 
+    
+    m_motorFL.config_kD(0, Constants.DTConsts.kD, Constants.DTConsts.kTimeOut);
+    m_motorFL.config_kF(0, Constants.DTConsts.kFF, Constants.DTConsts.kTimeOut); 
+    m_motorFL.config_kI(0, Constants.DTConsts.kI, Constants.DTConsts.kTimeOut); 
+    m_motorFL.config_kP(0, Constants.DTConsts.kP, Constants.DTConsts.kTimeOut); 
+
+    m_motorBL.config_kD(0, Constants.DTConsts.kD, Constants.DTConsts.kTimeOut);
+    m_motorBL.config_kF(0, Constants.DTConsts.kFF, Constants.DTConsts.kTimeOut); 
+    m_motorBL.config_kI(0, Constants.DTConsts.kI, Constants.DTConsts.kTimeOut); 
+    m_motorBL.config_kP(0, Constants.DTConsts.kP, Constants.DTConsts.kTimeOut); 
+
+    m_motorFR.configAllowableClosedloopError(0, Constants.DTConsts.kClosedLoopError, Constants.DTConsts.kTimeOut); 
+    m_motorFL.configAllowableClosedloopError(0, Constants.DTConsts.kClosedLoopError, Constants.DTConsts.kTimeOut); 
+    m_motorBR.configAllowableClosedloopError(0, Constants.DTConsts.kClosedLoopError, Constants.DTConsts.kTimeOut); 
+    m_motorBL.configAllowableClosedloopError(0, Constants.DTConsts.kClosedLoopError, Constants.DTConsts.kTimeOut); 
+
+    m_motorFR.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, Constants.DTConsts.kStatusFrame, Constants.DTConsts.kTimeOut); 
+    m_motorFL.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, Constants.DTConsts.kStatusFrame, Constants.DTConsts.kTimeOut); 
+    m_motorBR.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, Constants.DTConsts.kStatusFrame, Constants.DTConsts.kTimeOut); 
+    m_motorBL.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, Constants.DTConsts.kStatusFrame, Constants.DTConsts.kTimeOut); 
+
     m_motorBL.follow(m_motorFL);
     m_motorBR.follow(m_motorFR);
+
+    enableMotorBreak();
+
     m_controllerGroupL = new MotorControllerGroup(m_motorFL, m_motorBL);
     m_controllerGroupR = new MotorControllerGroup(m_motorFR, m_motorBR);
 
@@ -54,7 +91,23 @@ public class DriveTrain extends SubsystemBase {
 
     m_gyro = new AHRS(Port.kMXP);
     resetEncoders();
-    m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
+    m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d()); 
+  }
+
+  public void enableMotorBreak()
+  {
+    m_motorFR.setNeutralMode(NeutralMode.Brake);
+    m_motorFL.setNeutralMode(NeutralMode.Brake);
+    m_motorBR.setNeutralMode(NeutralMode.Brake);
+    m_motorBL.setNeutralMode(NeutralMode.Brake);
+  }
+
+  public void disableMotorBreak()
+  {
+    m_motorFR.setNeutralMode(NeutralMode.Coast);
+    m_motorFL.setNeutralMode(NeutralMode.Coast);
+    m_motorBR.setNeutralMode(NeutralMode.Coast);
+    m_motorBL.setNeutralMode(NeutralMode.Coast);
   }
 
   public double getEncPos() {
@@ -76,7 +129,7 @@ public void resetHeading(){
 }
 
   public double getHeading() {
-    return Math.IEEEremainder(m_gyro.getAngle(), 360);
+    return -Math.IEEEremainder(m_gyro.getAngle(), 360);
   }
   public double getTurnRate(){
     return m_gyro.getRate(); 
@@ -91,26 +144,44 @@ public void resetHeading(){
   public void drive(double x, double y) {
     m_differentialDrive.arcadeDrive(Math.abs(x) < Constants.kDriveThreshold ? x : Constants.kDriveReduction, Math.abs(y) < Constants.kDriveThreshold ? y : Constants.kDriveReduction);
   }
+
+  public void tankDriveVolts(double left, double right)
+  {
+    this.m_motorFR.set(ControlMode.Current, right);
+    this.m_motorFL.set(ControlMode.Current, left);
+  }
   public void driveVelocity(double left, double right){
-    double leftNativeVel = ConversionHelper.convertWPILibTrajectoryUnitsToTalonSRXNativeUnits(left, Constants.kWheelDiameter, true, Constants.kTicksPerRevolution); 
-    double rightNativeVel = ConversionHelper.convertWPILibTrajectoryUnitsToTalonSRXNativeUnits(right, Constants.kWheelDiameter, true, Constants.kTicksPerRevolution); 
+    double leftNativeVel = ConversionHelper.convertWPILibTrajectoryUnitsToTalonSRXNativeUnits(left, Constants.DTConsts.kWheelDiameter, true, Constants.DTConsts.kTicksPerRevolution); 
+    double rightNativeVel = ConversionHelper.convertWPILibTrajectoryUnitsToTalonSRXNativeUnits(right, Constants.DTConsts.kWheelDiameter, true, Constants.DTConsts.kTicksPerRevolution); 
     this.m_motorFR.set(ControlMode.Velocity, rightNativeVel);
     this.m_motorFL.set(ControlMode.Velocity, leftNativeVel);
     SmartDashboard.putNumber("Left Target Vel", leftNativeVel);
     SmartDashboard.putNumber("Left Target Vs Actual", leftNativeVel-this.m_motorFL.getSelectedSensorVelocity()); 
   }
+
   public DifferentialDriveWheelSpeeds getWheelSpeeds(){
     return new DifferentialDriveWheelSpeeds(
-      ConversionHelper.convertTalonNativeToWPITrajectoryUnits(this.m_motorFL.getSelectedSensorVelocity(), Constants.kWheelDiameter, true, Constants.kTicksPerRevolution),
-      ConversionHelper.convertTalonNativeToWPITrajectoryUnits(this.m_motorFR.getSelectedSensorVelocity(), Constants.kWheelDiameter, true, Constants.kTicksPerRevolution)
+      ConversionHelper.convertTalonNativeToWPITrajectoryUnits(this.m_motorFL.getSelectedSensorVelocity(), Constants.DTConsts.kWheelDiameter, true, Constants.DTConsts.kTicksPerRevolution),
+      ConversionHelper.convertTalonNativeToWPITrajectoryUnits(this.m_motorFR.getSelectedSensorVelocity(), Constants.DTConsts.kWheelDiameter, true, Constants.DTConsts.kTicksPerRevolution)
       );
   }
+
   public void resetOdometry(Pose2d pose){
     resetEncoders();
     m_odometry.resetPosition(pose, Rotation2d.fromDegrees(getHeading()));
   }
+
+  public Pose2d getPose(){
+    return m_odometry.getPoseMeters(); 
+  }
+
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    var gyroAngle = Rotation2d.fromDegrees(-m_gyro.getAngle());
+    double leftDistance = ConversionHelper.convertTalonEncoderTicksToMeters((int)m_motorFL.getSelectedSensorPosition(), Constants.DTConsts.kWheelDiameter, Constants.DTConsts.kTicksPerRevolution, true); 
+    double rightDistance = ConversionHelper.convertTalonEncoderTicksToMeters((int)m_motorFR.getSelectedSensorPosition(), Constants.DTConsts.kWheelDiameter, Constants.DTConsts.kTicksPerRevolution, true);
+
+    // Update the pose
+    m_odometry.update(gyroAngle, leftDistance, rightDistance);
   }
 }
