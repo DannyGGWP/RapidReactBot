@@ -16,6 +16,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 
@@ -34,7 +35,7 @@ private DigitalInput m_shooterSensor;
 public Shooter(){
 
   shooterMotor = new CANSparkMax(Constants.kshooterSpark, MotorType.kBrushless);
-  shooterMotor.setInverted(true);
+  shooterMotor.setInverted(false);
   m_pPidController = shooterMotor.getPIDController();
   kP = 5e-5;
   kI = 3e-7;
@@ -54,7 +55,10 @@ public Shooter(){
   m_shooterSensor = new DigitalInput(Constants.kSenseyShooty);
 }
   @Override 
-  public void periodic(){}
+  public void periodic(){
+    SmartDashboard.putNumber("Wheel Speed", shooterMotor.getEncoder().getVelocity()); 
+    SmartDashboard.putNumber("Wheel Motor", shooterMotor.get());
+  }
   @Override
   public void simulationPeriodic() {
     // TODO Auto-generated method stub
@@ -63,6 +67,7 @@ public Shooter(){
 
   public void onWheel(){
     m_pPidController.setReference(Constants.kSetPoint, ControlType.kVelocity);
+    //shooterMotor.set(0.1);
   }
 
   public void offWheel(){
@@ -83,5 +88,6 @@ public Shooter(){
   }
   public void reverse(){
     m_pPidController.setReference(Constants.kreverseSetPoint, ControlType.kVelocity);
+    //shooterMotor.set(-0.1);
   }
 }
