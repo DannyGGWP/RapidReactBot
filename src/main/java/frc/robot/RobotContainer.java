@@ -24,6 +24,7 @@ import frc.robot.commands.AutoGrabbyCommand;
 import frc.robot.commands.EjectBallCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ShootyCommand;
+import frc.robot.commands.TargetFinder;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Grabber;
@@ -108,11 +109,8 @@ public class RobotContainer {
       () -> m_shooter.raiseTOT(false)
     );
     new JoystickButton(m_xboxController, Button.kY.value)
-    .whenPressed(
-      () -> m_shooter.onWheel()
-    )
-    .whenReleased(
-      () -> m_shooter.offWheel()
+    .whileActiveOnce(
+      new TargetFinder(m_driveTrain)
     );
   }
 

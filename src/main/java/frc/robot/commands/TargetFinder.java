@@ -47,12 +47,14 @@ public class TargetFinder extends CommandBase {
     m_hasTarget = true; 
 
     double turnValue = tx * Constants.LimeLight.kSteerP; 
+    SmartDashboard.putNumber("Tracking Turn Value", turnValue);
     double driveValue = (Constants.LimeLight.kDesiredTarget - ta) * Constants.LimeLight.kDriveP; 
     if (driveValue < Constants.LimeLight.kMinSpeed)
       m_atTarget = true; 
     if (driveValue > Constants.LimeLight.kMaxDrive)
       driveValue = Constants.LimeLight.kMaxDrive; 
-    m_dDriveTrain.drive(driveValue, turnValue);
+    SmartDashboard.putNumber("Tracking Drive Value", driveValue);
+    m_dDriveTrain.drive(turnValue, 0.0);
     
   }
 
