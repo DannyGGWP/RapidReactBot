@@ -54,7 +54,7 @@ public class TargetFinder extends CommandBase {
     if (driveValue > Constants.LimeLight.kMaxDrive)
       driveValue = Constants.LimeLight.kMaxDrive; 
     SmartDashboard.putNumber("Tracking Drive Value", driveValue);
-    m_dDriveTrain.drive(turnValue, 0.0);
+    m_dDriveTrain.drive(turnValue, driveValue);
     
   }
 
