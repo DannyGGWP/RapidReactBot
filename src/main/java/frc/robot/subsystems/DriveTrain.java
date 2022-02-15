@@ -141,8 +141,10 @@ public void resetHeading(){
     m_motorBR.setSelectedSensorPosition(0);
   }
 
-  public void drive(double x, double y) {
-    m_differentialDrive.arcadeDrive(Math.abs(x) < Constants.kDriveThreshold ? x : Constants.kDriveReduction, Math.abs(y) < Constants.kDriveThreshold ? y : Constants.kDriveReduction);
+  public void drive(double xSpeed, double zRotation) {
+    SmartDashboard.putNumber("Arcade Drive X Speed", xSpeed);
+    SmartDashboard.putNumber("Arcade Drive Z Rotation", zRotation);
+    m_differentialDrive.arcadeDrive(Math.abs(xSpeed) < Constants.kDriveThreshold ? xSpeed : Constants.kDriveReduction, Math.abs(zRotation) < Constants.kDriveThreshold ? zRotation : Constants.kDriveReduction);
   }
 
   public void tankDriveVolts(double left, double right)

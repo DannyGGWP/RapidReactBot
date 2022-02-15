@@ -29,12 +29,12 @@ public final class Constants {
     /** Drive motor speed is multiplied by this value */                                               
     public static final double kDriveReduction = 0.75;
     
-    public static final int kGrabbySolenoidIndex = 5;
+    public static final int kGrabbySolenoidIndex = 7;
     public static final int kShootySolenoidIndex = 6;
-    public static final int kPickupSolenoidIndex = 7;
+    public static final int kPickupSolenoidIndex = 5;
     public static final int kSenseyGrabby = 0;
     public static final int kSenseyShooty = 1;
-    public static final int kSetPoint = 1500;
+    public static final int kSetPoint = 5000;
     public static final int kreverseSetPoint = -1000;
     public static final int kslowSpeed = 1500;
     public final class DTConsts {
@@ -59,7 +59,7 @@ public final class Constants {
     public final class LimeLight {
         public static final double kDriveP = 0.26; 
         public static final double kSteerP = 0.03;
-        public static final double kDesiredTarget = 13.0;
+        public static final double kDesiredTarget = 15.0;
         public static final double kMaxDrive = 0.5;
         public static final double kMinSpeed = 0.05; 
     }
