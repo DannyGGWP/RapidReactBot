@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
@@ -19,13 +20,14 @@ public class Hanger extends SubsystemBase {
   private CANSparkMax m_hangerMotor;
   public Hanger() {
     m_hangerMotor = new CANSparkMax(Constants.kHangerSpark, MotorType.kBrushless);
+    m_hangerMotor.setIdleMode(IdleMode.kBrake);
 
   }
   public void raiseHanger(){
-    m_hangerMotor.set(0.1);
+    m_hangerMotor.set(0.5);
   }
   public void lowerHanger(){
-    m_hangerMotor.set(-0.1);
+    m_hangerMotor.set(-0.25);
   }
   public void stopHang(){
     m_hangerMotor.set(0.0);

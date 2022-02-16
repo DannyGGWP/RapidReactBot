@@ -23,7 +23,7 @@ public final class Constants {
     public static final int kMotorBR = 4;
     public static final int kPCM = 52;
     public static final int kshooterSpark = 7;
-    public static int kHangerSpark = 8;
+    public static final int kHangerSpark = 8;
 
     /** The upper limit at which the drive will stop using kDriveReduction */
     public static final double kDriveThreshold = 0.9;
