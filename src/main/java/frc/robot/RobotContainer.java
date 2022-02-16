@@ -28,6 +28,7 @@ import frc.robot.commands.TargetFinder;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Grabber;
+import frc.robot.subsystems.Hanger;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.TalonRamseteControllerAbstraction;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -48,20 +49,25 @@ public class RobotContainer {
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
   private XboxController m_xboxController;
+  private XboxController m_hangerController;
   private DriveTrain m_driveTrain;
   public Grabber m_grabber;
   public Shooter m_shooter;
   public AutoGrabbyCommand m_grabCommand;
   public ShootyCommand m_shootyCommand;
+  public Hanger m_hanger;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     m_shooter = new Shooter();
     m_xboxController = new XboxController(0);
+    m_hangerController = new XboxController(1);
     m_driveTrain = new DriveTrain();
     m_grabber = new Grabber();
     m_grabCommand = new AutoGrabbyCommand(m_grabber, m_shooter);
     m_shootyCommand = new ShootyCommand(m_shooter, m_grabber);
+    m_hanger = new Hanger();
+    
     // Configure the button bindings
     configureButtonBindings();
 
@@ -111,6 +117,20 @@ public class RobotContainer {
     new JoystickButton(m_xboxController, Button.kY.value)
     .whileActiveOnce(
       new TargetFinder(m_driveTrain)
+    );
+    new JoystickButton(m_hangerController, Button.kY.value)
+    .whenPressed(
+      () -> m_hanger.raiseHanger() 
+    )
+    .whenReleased(
+      () -> m_hanger.stopHang()
+    );
+    new JoystickButton(m_hangerController, Button.kA.value)
+    .whenPressed(
+      () -> m_hanger.lowerHanger() 
+    )
+    .whenReleased(
+      () -> m_hanger.stopHang()
     );
   }
 

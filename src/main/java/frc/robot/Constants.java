@@ -23,6 +23,7 @@ public final class Constants {
     public static final int kMotorBR = 4;
     public static final int kPCM = 52;
     public static final int kshooterSpark = 7;
+    public static int kHangerSpark = 8;
 
     /** The upper limit at which the drive will stop using kDriveReduction */
     public static final double kDriveThreshold = 0.9;
@@ -64,6 +65,7 @@ public final class Constants {
         public static final double kMinSpeed = 0.05; 
     }
     public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(DTConsts.kTrackWidth);
+    
     
 }
 

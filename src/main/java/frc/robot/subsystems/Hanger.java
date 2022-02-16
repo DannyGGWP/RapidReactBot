@@ -4,11 +4,33 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+
+
 
 public class Hanger extends SubsystemBase {
+
   /** Creates a new ExampleSubsystem. */
-  public Hanger() {}
+  private CANSparkMax m_hangerMotor;
+  public Hanger() {
+    m_hangerMotor = new CANSparkMax(Constants.kHangerSpark, MotorType.kBrushless);
+
+  }
+  public void raiseHanger(){
+    m_hangerMotor.set(0.1);
+  }
+  public void lowerHanger(){
+    m_hangerMotor.set(-0.1);
+  }
+  public void stopHang(){
+    m_hangerMotor.set(0.0);
+  }
+  
 
   @Override
   public void periodic() {
