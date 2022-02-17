@@ -100,8 +100,7 @@ public class RobotContainer {
       .whenReleased(
         () -> m_grabber.lowerGrabber(false)
       );
-    new JoystickButton(m_xboxController, Button.kA.value)
-      .whileActiveOnce(m_grabCommand);
+    
     new JoystickButton(m_xboxController, Button.kB.value)
       .whileActiveOnce(m_shootyCommand);
     new JoystickButton(m_xboxController, Button.kBack.value)
@@ -132,6 +131,12 @@ public class RobotContainer {
     .whenReleased(
       () -> m_hanger.stopHang()
     );
+  }
+  private void driversControlPlan(){
+    new JoystickButton(m_xboxController, Button.kA.value)
+      .whileActiveOnce(m_grabCommand);
+    
+    
   }
 
   public Command createAutoNavigationCommand(Pose2d start, List<Translation2d> waypoints, Pose2d end) {
