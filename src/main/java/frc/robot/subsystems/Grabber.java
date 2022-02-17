@@ -26,14 +26,26 @@ public class Grabber extends SubsystemBase {
   private Solenoid m_pickupSolenoid;
   private DigitalInput m_grabberSensor;
   private boolean m_isRedAlliance;
+  private Color m_red;
+  private Color m_blue;
+  private Color m_floor;
 
   /** Creates a new Grabber. */
   public Grabber() {
     m_grabbySolenoid = new Solenoid(Constants.kPCM, PneumaticsModuleType.CTREPCM, Constants.kGrabbySolenoidIndex);
     m_pickupSolenoid = new Solenoid(Constants.kPCM, PneumaticsModuleType.CTREPCM, Constants.kPickupSolenoidIndex);
     m_colorSensor = new ColorSensorV3(Port.kOnboard);
-    m_colorMatcher.addColorMatch(Color.kBlue);
-    m_colorMatcher.addColorMatch(Color.kRed);
+    // m_red = new Color(0.475, 0.388, 0.137);
+    m_red = new Color(0.334, 0.477, 0.189);
+    // m_blue = new Color(0.19, 0.437, 0.372);
+    m_blue = new Color(0.261, 0.494, 0.245);
+    m_floor = new Color(0.295, 0.5, 0.2);
+    // m_colorMatcher.addColorMatch(Color.kBlue);
+    // m_colorMatcher.addColorMatch(Color.kGreen);
+    // m_colorMatcher.addColorMatch(Color.kRed);
+    m_colorMatcher.addColorMatch(m_red);
+    m_colorMatcher.addColorMatch(m_blue);
+    m_colorMatcher.addColorMatch(m_floor);
     m_grabberSensor = new DigitalInput(Constants.kSenseyGrabby);
     m_isRedAlliance = DriverStation.getAlliance() == DriverStation.Alliance.Red;
   }
@@ -56,10 +68,19 @@ public class Grabber extends SubsystemBase {
     SmartDashboard.putNumber("Detected Color Green", detectedColor.green);
     SmartDashboard.putNumber("Detected Color Blue", detectedColor.blue);
     SmartDashboard.putNumber("Confidence", match.confidence);
-    if (match.color == Color.kRed) {
+    // if (match.color == Color.kRed) {
+    //   return "Red";
+    // } else if (match.color == Color.kBlue) {
+    //   return "Blue";
+    // } else {
+    //   return "Green";
+    // }
+    if (match.color == m_red) {
       return "Red";
-    } else {
+    } else if (match.color == m_blue) {
       return "Blue";
+    } else {
+      return "None";
     }
   }
 

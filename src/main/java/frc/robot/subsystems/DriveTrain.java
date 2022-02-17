@@ -144,7 +144,8 @@ public void resetHeading(){
   public void drive(double xSpeed, double zRotation) {
     SmartDashboard.putNumber("Arcade Drive X Speed", xSpeed);
     SmartDashboard.putNumber("Arcade Drive Z Rotation", zRotation);
-    m_differentialDrive.arcadeDrive(Math.abs(xSpeed) < Constants.kDriveThreshold ? xSpeed : Constants.kDriveReduction, Math.abs(zRotation) < Constants.kDriveThreshold ? zRotation : Constants.kDriveReduction);
+    // m_differentialDrive.arcadeDrive(Math.abs(xSpeed) < Constants.kDriveThreshold ? xSpeed : Constants.kDriveReduction, Math.abs(zRotation) < Constants.kDriveThreshold ? zRotation : Constants.kDriveReduction);
+    m_differentialDrive.arcadeDrive(xSpeed, zRotation);
   }
 
   public void tankDriveVolts(double left, double right)
