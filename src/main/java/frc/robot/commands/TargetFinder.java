@@ -29,6 +29,7 @@ public class TargetFinder extends CommandBase {
   public void initialize() {
     m_hasTarget = false; 
     m_atTarget = false; 
+    m_dDriveTrain.enableMotorBreak();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -62,6 +63,7 @@ public class TargetFinder extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_dDriveTrain.drive(0, 0);
+    m_dDriveTrain.disableMotorBreak();
   }
 
   // Returns true when the command should end.

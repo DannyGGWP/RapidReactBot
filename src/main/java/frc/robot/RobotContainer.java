@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.commands.AutoGrabbyCommand;
 import frc.robot.commands.EjectBallCommand;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.ManualShooter;
 import frc.robot.commands.ShootyCommand;
 import frc.robot.commands.TargetFinder;
 import frc.robot.subsystems.DriveTrain;
@@ -56,7 +57,7 @@ public class RobotContainer {
   public AutoGrabbyCommand m_grabCommand;
   public ShootyCommand m_shootyCommand;
   public Hanger m_hanger;
-
+public ManualShooter m_ManualShootyCommand;
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     m_shooter = new Shooter();
@@ -67,7 +68,7 @@ public class RobotContainer {
     m_grabCommand = new AutoGrabbyCommand(m_grabber, m_shooter);
     m_shootyCommand = new ShootyCommand(m_shooter, m_grabber);
     m_hanger = new Hanger();
-    
+    m_ManualShootyCommand=new ManualShooter(m_shooter, m_grabber);
     // Configure the button bindings
     configureButtonBindings();
 
@@ -105,7 +106,8 @@ public class RobotContainer {
       .whileActiveOnce(m_shootyCommand);
     new JoystickButton(m_xboxController, Button.kBack.value)
       .whileActiveOnce(new EjectBallCommand(m_shooter, m_grabber));
-
+    new JoystickButton(m_xboxController, Button.kStart.value)
+      .whileActiveOnce(m_ManualShootyCommand);
     new JoystickButton(m_xboxController, Button.kX.value)
     .whenPressed(
       () -> m_shooter.raiseTOT(true)
