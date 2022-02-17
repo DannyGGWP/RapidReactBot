@@ -81,7 +81,7 @@ public class DriveTrain extends SubsystemBase {
     m_motorBL.follow(m_motorFL);
     m_motorBR.follow(m_motorFR);
 
-    enableMotorBreak();
+    
 
     m_controllerGroupL = new MotorControllerGroup(m_motorFL, m_motorBL);
     m_controllerGroupR = new MotorControllerGroup(m_motorFR, m_motorBR);
