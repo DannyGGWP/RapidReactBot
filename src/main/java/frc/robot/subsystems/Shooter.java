@@ -60,7 +60,7 @@ public Shooter(){
     SmartDashboard.putNumber("Wheel Speed", shooterMotor.getEncoder().getVelocity()); 
     SmartDashboard.putNumber("Wheel Motor", shooterMotor.get());
 
-    idleSpin();
+    //idleSpin();
   }
   @Override
   public void simulationPeriodic() {
