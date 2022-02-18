@@ -38,7 +38,8 @@ public final class Constants {
     public static final int kSetPoint = 5000;
     public static final int kreverseSetPoint = -1000;
     public static final int kslowSpeed = 1500;
-    public final class DTConsts {
+    public static final double kIdleSpeed = 0.1;
+     public final class DTConsts {
         public static final double kWheelDiameter = 0.50; // Feet 
         public static final double kTrackWidth = 0.0;
         public static final int kTicksPerRevolution = (int)(4096.0*10.71);

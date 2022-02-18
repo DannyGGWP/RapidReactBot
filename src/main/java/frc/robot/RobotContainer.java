@@ -86,14 +86,25 @@ public ManualShooter m_ManualShootyCommand;
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {
+  private void configureButtonBindings(){
+    driversControlPlan();
+  }
+  private void driversControlPlan(){
+    new JoystickButton(m_xboxController, Button.kA.value)
+      .whileActiveOnce(m_grabCommand);
+    new JoystickButton(m_xboxController, Button.kY.value)
+      .whileActiveOnce(new EjectBallCommand(m_shooter, m_grabber));
+    new JoystickButton(m_xboxController, Button.kB.value)
+      .whileActiveOnce(
+        new TargetFinder(m_driveTrain)
+      );
     new JoystickButton(m_xboxController, Button.kRightBumper.value)
-        .whenPressed(
-          () -> m_grabber.grabbyGrab(true)
-        )
-        .whenReleased(
-          () -> m_grabber.grabbyGrab(false)
-        );
+      .whenPressed(
+        () -> m_grabber.grabbyGrab(true)
+      )
+      .whenReleased(
+        () -> m_grabber.grabbyGrab(false)
+      );
     new JoystickButton(m_xboxController, Button.kLeftBumper.value)
       .whenPressed(
         () -> m_grabber.lowerGrabber(true)
@@ -101,39 +112,27 @@ public ManualShooter m_ManualShootyCommand;
       .whenReleased(
         () -> m_grabber.lowerGrabber(false)
       );
-    new JoystickButton(m_xboxController, Button.kA.value)
-      .whileActiveOnce(m_grabCommand);
-    new JoystickButton(m_xboxController, Button.kB.value)
+
+      // control pannel buttons 
+
+    new JoystickButton(m_hangerController, Button.kB.value)
       .whileActiveOnce(m_shootyCommand);
-    new JoystickButton(m_xboxController, Button.kBack.value)
-      .whileActiveOnce(new EjectBallCommand(m_shooter, m_grabber));
-    new JoystickButton(m_xboxController, Button.kStart.value)
+    new JoystickButton(m_hangerController, Button.kX.value)
       .whileActiveOnce(m_ManualShootyCommand);
-    new JoystickButton(m_xboxController, Button.kX.value)
-    .whenPressed(
-      () -> m_shooter.raiseTOT(true)
-    )
-    .whenReleased(
-      () -> m_shooter.raiseTOT(false)
-    );
-    new JoystickButton(m_xboxController, Button.kY.value)
-    .whileActiveOnce(
-      new TargetFinder(m_driveTrain)
-    );
     new JoystickButton(m_hangerController, Button.kY.value)
-    .whenPressed(
-      () -> m_hanger.raiseHanger() 
-    )
-    .whenReleased(
-      () -> m_hanger.stopHang()
-    );
+      .whenPressed(
+        () -> m_hanger.raiseHanger() 
+      )
+      .whenReleased(
+        () -> m_hanger.stopHang()
+      );
     new JoystickButton(m_hangerController, Button.kA.value)
-    .whenPressed(
-      () -> m_hanger.lowerHanger() 
-    )
-    .whenReleased(
-      () -> m_hanger.stopHang()
-    );
+      .whenPressed(
+        () -> m_hanger.lowerHanger() 
+      )
+      .whenReleased(
+        () -> m_hanger.stopHang()
+      );
   }
 
   public Command createAutoNavigationCommand(Pose2d start, List<Translation2d> waypoints, Pose2d end) {
