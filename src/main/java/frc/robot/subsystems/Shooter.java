@@ -31,6 +31,7 @@ private SparkMaxPIDController m_pPidController;
 public double kP,kI,kD,kIZ, kFF,kMaxOutput, kMinOutput, kMaxRPM;
 private Solenoid m_shootySolenoid;
 private DigitalInput m_shooterSensor;
+private boolean m_isRunning;
 
 public Shooter(){
 
@@ -58,20 +59,34 @@ public Shooter(){
   public void periodic(){
     SmartDashboard.putNumber("Wheel Speed", shooterMotor.getEncoder().getVelocity()); 
     SmartDashboard.putNumber("Wheel Motor", shooterMotor.get());
+
+    idleSpin();
   }
   @Override
   public void simulationPeriodic() {
     // TODO Auto-generated method stub
     super.simulationPeriodic();
   }
+  public void idleSpin(){
+    if (!m_isRunning) {
+      if(isBallReady()) {
+         shooterMotor.set(Constants.kIdleSpeed);
+        //m_pPidController.setReference(Constants.kIdleSpeed, ControlType.kVelocity);
+      } else {
+        offWheel();
+      }
+    }
+  }
 
   public void onWheel(){
     m_pPidController.setReference(Constants.kSetPoint, ControlType.kVelocity);
-    //shooterMotor.set(0.1);
+    m_isRunning = true;
+    //shooterMotor.set(0.1); 
   }
 
   public void offWheel(){
     shooterMotor.stopMotor();
+    m_isRunning = false;
   }
 
   public double wheelSpin(){
@@ -88,6 +103,7 @@ public Shooter(){
   }
   public void reverse(){
     m_pPidController.setReference(Constants.kreverseSetPoint, ControlType.kVelocity);
+    m_isRunning = true;
     //shooterMotor.set(-0.1);
   }
 }
