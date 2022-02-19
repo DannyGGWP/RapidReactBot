@@ -138,7 +138,7 @@ public ManualShooter m_ManualShootyCommand;
       new JoystickButton(m_hangerController, Button.kRightBumper.value)
       .whileActiveOnce(
         new InstantCommand(m_driveTrain::resetHeading)
-        .andThen( new TurnToAngle(90, m_driveTrain, 0.004, 0.00000, 0.0005, 4))
+        .andThen( new TurnToAngle(90, m_driveTrain, 0.003, 0.0001, 0.000, 4))
       );
   }
 

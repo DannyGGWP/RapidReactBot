@@ -35,7 +35,7 @@ public final class Constants {
     public static final int kPickupSolenoidIndex = 5;
     public static final int kSenseyGrabby = 0;
     public static final int kSenseyShooty = 1;
-    public static final int kSetPoint = 5000;
+    public static final int kSetPoint = 4500;
     public static final int kreverseSetPoint = -1000;
     public static final int kslowSpeed = 1500;
     public static final double kIdleSpeed = 0.1;

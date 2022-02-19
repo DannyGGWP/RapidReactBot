@@ -13,6 +13,8 @@ import frc.robot.Constants;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -32,6 +34,7 @@ public double kP,kI,kD,kIZ, kFF,kMaxOutput, kMinOutput, kMaxRPM;
 private Solenoid m_shootySolenoid;
 private DigitalInput m_shooterSensor;
 private boolean m_isRunning;
+private Debouncer m_totDebouncer; 
 
 public Shooter(){
 
@@ -54,6 +57,7 @@ public Shooter(){
   m_pPidController.setOutputRange(kMinOutput, kMaxOutput);
   m_shootySolenoid = new Solenoid(Constants.kPCM, PneumaticsModuleType.CTREPCM, Constants.kShootySolenoidIndex);
   m_shooterSensor = new DigitalInput(Constants.kSenseyShooty);
+  m_totDebouncer = new Debouncer(0.5,DebounceType.kBoth);
 }
   @Override 
   public void periodic(){
@@ -99,7 +103,7 @@ public Shooter(){
   }
 
   public boolean isBallReady() {
-    return m_shooterSensor.get();
+    return m_totDebouncer.calculate(m_shooterSensor.get());
   }
   public void reverse(){
     m_pPidController.setReference(Constants.kreverseSetPoint, ControlType.kVelocity);
