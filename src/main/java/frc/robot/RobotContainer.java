@@ -26,6 +26,7 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ManualShooter;
 import frc.robot.commands.ShootyCommand;
 import frc.robot.commands.TargetFinder;
+import frc.robot.commands.TurnToAngle;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Grabber;
@@ -132,6 +133,10 @@ public ManualShooter m_ManualShootyCommand;
       )
       .whenReleased(
         () -> m_hanger.stopHang()
+      );
+      new JoystickButton(m_hangerController, Button.kRightBumper.value)
+      .whileActiveOnce(
+        new TurnToAngle(90, m_driveTrain, 0.010, 0.003, 0.0016, 4)
       );
   }
 
