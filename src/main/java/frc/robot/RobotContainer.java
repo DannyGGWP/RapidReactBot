@@ -34,6 +34,7 @@ import frc.robot.subsystems.Hanger;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.TalonRamseteControllerAbstraction;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -136,7 +137,10 @@ public ManualShooter m_ManualShootyCommand;
       );
       new JoystickButton(m_hangerController, Button.kRightBumper.value)
       .whileActiveOnce(
-        new TurnToAngle(90, m_driveTrain, 0.010, 0.003, 0.0016, 4)
+        new InstantCommand(m_driveTrain::enableMotorBreak)
+        .andThen(new InstantCommand(m_driveTrain::resetHeading))
+        .andThen( new TurnToAngle(90, m_driveTrain, 0.010, 0.003, 0.0016, 4))
+        .andThen(new InstantCommand(m_driveTrain::disableMotorBreak))
       );
   }
 
