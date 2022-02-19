@@ -181,6 +181,7 @@ public void resetHeading(){
   @Override
   public void periodic() {
     var gyroAngle = Rotation2d.fromDegrees(-m_gyro.getAngle());
+    SmartDashboard.putNumber("current heading", getHeading());
     double leftDistance = ConversionHelper.convertTalonEncoderTicksToMeters((int)m_motorFL.getSelectedSensorPosition(), Constants.DTConsts.kWheelDiameter, Constants.DTConsts.kTicksPerRevolution, true); 
     double rightDistance = ConversionHelper.convertTalonEncoderTicksToMeters((int)m_motorFR.getSelectedSensorPosition(), Constants.DTConsts.kWheelDiameter, Constants.DTConsts.kTicksPerRevolution, true);
 
