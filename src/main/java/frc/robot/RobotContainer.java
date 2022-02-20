@@ -14,6 +14,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
@@ -53,6 +54,21 @@ public class RobotContainer {
 
   private XboxController m_xboxController;
   private XboxController m_hangerController;
+  public static Joystick panel = new Joystick(1);
+  public static JoystickButton m_autoSwitchOne = new JoystickButton(panel, Constants.kAutoSwitchOne);
+  public static JoystickButton m_autoSwitchTwo = new JoystickButton(panel, Constants.kAutoSwitchTwo);
+  public static JoystickButton m_autoSwitchThree = new JoystickButton(panel, Constants.kAutoSwitchThree);
+  public static JoystickButton m_autoSwitchFour = new JoystickButton(panel, Constants.kAautoSwitchFour);
+  public static JoystickButton m_shoot = new JoystickButton(panel, Constants.kShoot);
+  public static JoystickButton m_manualShoot = new JoystickButton(panel, Constants.kManualShoot);
+  public static JoystickButton m_killSwitch = new JoystickButton(panel, Constants.kKillSwitch);
+  public static JoystickButton m_hangOneUp = new JoystickButton(panel, Constants.kHangOneUp);
+  public static JoystickButton m_hangOneDown = new JoystickButton(panel, Constants.kHangOnedown);
+  public static JoystickButton m_hangTwoUp = new JoystickButton(panel, Constants.kHangTwoUp);
+  public static JoystickButton m_hangTwoDown = new JoystickButton(panel, Constants.kHangTwoDown);
+  public static JoystickButton m_autoPickup = new JoystickButton(panel, Constants.kAutoPickup);
+  public static JoystickButton m_eject = new JoystickButton(panel, Constants.kEject);
+
   private DriveTrain m_driveTrain;
   public Grabber m_grabber;
   public Shooter m_shooter;
@@ -64,7 +80,7 @@ public ManualShooter m_ManualShootyCommand;
   public RobotContainer() {
     m_shooter = new Shooter();
     m_xboxController = new XboxController(0);
-    m_hangerController = new XboxController(1);
+    //m_hangerController = new XboxController(1);
     m_driveTrain = new DriveTrain();
     m_grabber = new Grabber();
     m_grabCommand = new AutoGrabbyCommand(m_grabber, m_shooter);
@@ -117,18 +133,18 @@ public ManualShooter m_ManualShootyCommand;
 
       // control pannel buttons 
 
-    new JoystickButton(m_hangerController, Button.kB.value)
+    new JoystickButton(panel, Constants.kShoot)
       .whileActiveOnce(m_shootyCommand);
-    new JoystickButton(m_hangerController, Button.kX.value)
+    new JoystickButton(panel, Constants.kManualShoot)
       .whileActiveOnce(m_ManualShootyCommand);
-    new JoystickButton(m_hangerController, Button.kY.value)
+    new JoystickButton(panel, Constants.kHangOneUp)
       .whenPressed(
         () -> m_hanger.raiseHanger() 
       )
       .whenReleased(
         () -> m_hanger.stopHang()
       );
-    new JoystickButton(m_hangerController, Button.kA.value)
+    new JoystickButton(panel, Constants.kHangOneUp)
       .whenPressed(
         () -> m_hanger.lowerHanger() 
       )
