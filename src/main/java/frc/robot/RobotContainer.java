@@ -144,7 +144,7 @@ public ManualShooter m_ManualShootyCommand;
       .whenReleased(
         () -> m_hanger.stopHang()
       );
-    new JoystickButton(panel, Constants.kHangOneUp)
+    new JoystickButton(panel, Constants.kHangOnedown)
       .whenPressed(
         () -> m_hanger.lowerHanger() 
       )
