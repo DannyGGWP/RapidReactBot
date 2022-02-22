@@ -61,7 +61,7 @@ public class ShootyCommand extends CommandBase {
       }
       case RAISETOT: {
         m_shooter.raiseTOT(true);
-        if (Timer.getFPGATimestamp() > timestamp + 2) {
+        if (Timer.getFPGATimestamp() > timestamp + 1) {
           timestamp = Timer.getFPGATimestamp();
           currentState = states.LOWERTOT;
         }

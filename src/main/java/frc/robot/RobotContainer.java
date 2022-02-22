@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import java.sql.Driver;
 import java.util.List;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -13,6 +14,8 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticsControlModule;
@@ -21,6 +24,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.AutoGrabbyCommand;
 import frc.robot.commands.EjectBallCommand;
 import frc.robot.commands.ExampleCommand;
@@ -53,7 +57,6 @@ public class RobotContainer {
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
   private XboxController m_xboxController;
-  private XboxController m_hangerController;
   public static Joystick panel = new Joystick(1);
   public static JoystickButton m_autoSwitchOne = new JoystickButton(panel, Constants.kAutoSwitchOne);
   public static JoystickButton m_autoSwitchTwo = new JoystickButton(panel, Constants.kAutoSwitchTwo);
@@ -75,20 +78,27 @@ public class RobotContainer {
   public AutoGrabbyCommand m_grabCommand;
   public ShootyCommand m_shootyCommand;
   public Hanger m_hanger;
+  private boolean m_isRedAlliance;
+
 public ManualShooter m_ManualShootyCommand;
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     m_shooter = new Shooter();
     m_xboxController = new XboxController(0);
-    //m_hangerController = new XboxController(1);
     m_driveTrain = new DriveTrain();
     m_grabber = new Grabber();
     m_grabCommand = new AutoGrabbyCommand(m_grabber, m_shooter);
     m_shootyCommand = new ShootyCommand(m_shooter, m_grabber);
     m_hanger = new Hanger();
     m_ManualShootyCommand=new ManualShooter(m_shooter, m_grabber);
+    m_isRedAlliance = DriverStation.getAlliance() == DriverStation.Alliance.Red;
     // Configure the button bindings
     configureButtonBindings();
+    if (m_isRedAlliance) {
+      NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(0);
+    } else {
+      NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(1);
+    }
 
     m_driveTrain.setDefaultCommand(
       new RunCommand(
@@ -151,10 +161,23 @@ public ManualShooter m_ManualShootyCommand;
       .whenReleased(
         () -> m_hanger.stopHang()
       );
-      new JoystickButton(m_hangerController, Button.kRightBumper.value)
+    new JoystickButton(panel, Constants.kKillSwitch)
+      .whenPressed(
+        () -> m_hanger.enableHanger()
+      )
+      .whenReleased(
+        () -> m_hanger.disableHanger()
+      );
+    new JoystickButton(panel, Constants.kEject)
+      .whileActiveOnce(new EjectBallCommand(m_shooter, m_grabber)
+    );
+    new JoystickButton(panel, Constants.kAutoPickup)
+      .whileActiveOnce(m_grabCommand);
+    
+    new JoystickButton(m_xboxController, Button.kBack.value)
       .whileActiveOnce(
         new InstantCommand(m_driveTrain::resetHeading)
-        .andThen( new TurnToAngle(90, m_driveTrain, 0.003, 0.0001, 0.000, 4))
+        .andThen(new TurnToAngle(90, m_driveTrain, 0.003, 0.0001, 0.000, 4))
       );
   }
 

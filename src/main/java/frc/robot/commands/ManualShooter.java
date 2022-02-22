@@ -62,7 +62,7 @@ public class ManualShooter extends CommandBase {
       }
       case RAISETOT: {
         m_shooter.raiseTOT(true);
-        if (Timer.getFPGATimestamp() > timestamp + 2) {
+        if (Timer.getFPGATimestamp() > timestamp + 1) {
           timestamp = Timer.getFPGATimestamp();
           currentState = states.LOWERTOT;
         }
@@ -70,7 +70,7 @@ public class ManualShooter extends CommandBase {
       }
       case LOWERTOT: {
         m_shooter.raiseTOT(false);
-        if (Timer.getFPGATimestamp() > timestamp + 3) {
+        if (Timer.getFPGATimestamp() > timestamp + 1) {
           
             currentState = states.END;
           
