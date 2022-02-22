@@ -87,7 +87,7 @@ public class DriveTrain extends SubsystemBase {
     m_controllerGroupR = new MotorControllerGroup(m_motorFR, m_motorBR);
 
     m_differentialDrive = new DifferentialDrive(m_controllerGroupL, m_controllerGroupR);
-    m_differentialDrive.setDeadband(0.05);
+    //m_differentialDrive.setDeadband(0.0);
 
     m_gyro = new AHRS(Port.kMXP);
     resetEncoders();
@@ -146,6 +146,7 @@ public void resetHeading(){
     SmartDashboard.putNumber("Arcade Drive Z Rotation", zRotation);
     // m_differentialDrive.arcadeDrive(Math.abs(xSpeed) < Constants.kDriveThreshold ? xSpeed : Constants.kDriveReduction, Math.abs(zRotation) < Constants.kDriveThreshold ? zRotation : Constants.kDriveReduction);
     m_differentialDrive.arcadeDrive(xSpeed, zRotation);
+    //m_differentialDrive.arcadeDrive(xSpeed, zRotation, squareInputs);
   }
 
   public void tankDriveVolts(double left, double right)

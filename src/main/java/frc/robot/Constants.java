@@ -35,10 +35,27 @@ public final class Constants {
     public static final int kPickupSolenoidIndex = 5;
     public static final int kSenseyGrabby = 0;
     public static final int kSenseyShooty = 1;
-    public static final int kSetPoint = 5000;
+    public static final int kSetPoint = 4500;
     public static final int kreverseSetPoint = -1000;
     public static final int kslowSpeed = 1500;
     public static final double kIdleSpeed = 0.1;
+
+    // control panel buttons 
+    public static final int kAutoSwitchOne = 9;
+    public static final int kAutoSwitchTwo = 10;
+    public static final int kAutoSwitchThree = 11;
+    public static final int kAautoSwitchFour = 12;
+    public static final int kShoot = 13;
+    public static final int kManualShoot = 14;
+    public static final int kKillSwitch = 15;
+    public static final int kHangOneUp = 2;
+    public static final int kHangOnedown = 16;
+    public static final int kHangTwoUp = 6;
+    public static final int kHangTwoDown = 7;
+    public static final int kAutoPickup = 8;
+    public static final int kEject = 1;
+    
+
      public final class DTConsts {
         public static final double kWheelDiameter = 0.50; // Feet 
         public static final double kTrackWidth = 0.0;

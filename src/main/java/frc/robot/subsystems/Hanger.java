@@ -18,16 +18,30 @@ public class Hanger extends SubsystemBase {
 
   /** Creates a new ExampleSubsystem. */
   private CANSparkMax m_hangerMotor;
+  private boolean m_enabled;
   public Hanger() {
     m_hangerMotor = new CANSparkMax(Constants.kHangerSpark, MotorType.kBrushless);
     m_hangerMotor.setIdleMode(IdleMode.kBrake);
-
+    m_enabled = false;
+  }
+  public void enableHanger() {
+    m_enabled = true;
+  }
+  public void disableHanger() {
+    m_enabled = false;
+    stopHang();
   }
   public void raiseHanger(){
-    m_hangerMotor.set(0.5);
+    if (!m_enabled) {
+      return;
+    }
+    m_hangerMotor.set(-0.5);
   }
   public void lowerHanger(){
-    m_hangerMotor.set(-0.25);
+    if (!m_enabled) {
+      return;
+    }
+    m_hangerMotor.set(0.25);
   }
   public void stopHang(){
     m_hangerMotor.set(0.0);

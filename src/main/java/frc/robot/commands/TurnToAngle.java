@@ -18,7 +18,7 @@ public class TurnToAngle extends PIDCommand {
         // The controller that the command will use
         new PIDController(p, i, d),
         // This should return the measurement
-        vroomVroom:: getHeading,
+        vroomVroom::getHeading,
         targetAngle,
         // This should return the setpoint (can also be a constant)
       
