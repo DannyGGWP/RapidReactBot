@@ -56,7 +56,7 @@ public class ShootyCommand extends CommandBase {
       }
       case RAMPWHEEL: {
         m_shooter.onWheel();
-        if (m_shooter.wheelSpin() > Constants.kSetPoint - 100) {
+        if (m_shooter.wheelSpin() > Constants.kSetPoint - 100 && m_shooter.isBallReady()) {
           timestamp = Timer.getFPGATimestamp();
           currentState = states.RAISETOT;
         }
@@ -83,7 +83,7 @@ public class ShootyCommand extends CommandBase {
       }
       case RELEASEBALL: {
         m_grabber.grabbyGrab(false);
-        currentState = states.START;
+        currentState = states.RAMPWHEEL;
         break;
       }
       case END: {}
