@@ -145,7 +145,7 @@ public void resetHeading(){
     SmartDashboard.putNumber("Arcade Drive X Speed", xSpeed);
     SmartDashboard.putNumber("Arcade Drive Z Rotation", zRotation);
     // m_differentialDrive.arcadeDrive(Math.abs(xSpeed) < Constants.kDriveThreshold ? xSpeed : Constants.kDriveReduction, Math.abs(zRotation) < Constants.kDriveThreshold ? zRotation : Constants.kDriveReduction);
-    m_differentialDrive.arcadeDrive(Math.signum(xSpeed) * Math.pow(xSpeed, 4), zRotation, false);
+    m_differentialDrive.arcadeDrive(Math.signum(xSpeed) * Math.pow(xSpeed, 2), Math.signum(zRotation) * Math.pow(zRotation, 2), false);
     //m_differentialDrive.arcadeDrive(xSpeed, zRotation, squareInputs);
   }
 

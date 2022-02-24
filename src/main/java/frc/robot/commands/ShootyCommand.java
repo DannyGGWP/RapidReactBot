@@ -64,7 +64,7 @@ public class ShootyCommand extends CommandBase {
       }
       case RAISETOT: {
         m_shooter.raiseTOT(true);
-        if (Timer.getFPGATimestamp() > timestamp + 1) {
+        if ((Timer.getFPGATimestamp() > timestamp + 1 || m_shooter.isTOTRaised()) && !m_shooter.isBallReady()) {
           timestamp = Timer.getFPGATimestamp();
           currentState = states.LOWERTOT;
         }
@@ -72,13 +72,13 @@ public class ShootyCommand extends CommandBase {
       }
       case LOWERTOT: {
         m_shooter.raiseTOT(false);
-        if (Timer.getFPGATimestamp() > timestamp + 1) {
-          if (!m_shooter.isBallReady() && m_grabber.ballAtGrabber()) {
-            currentState = states.RELEASEBALL;
-          } else {
-            currentState = states.END;
-          }
+        // if (Timer.getFPGATimestamp() > timestamp + 1) {
+        if (!m_shooter.isBallReady() && m_grabber.ballAtGrabber()) {
+          currentState = states.RELEASEBALL;
+        } else {
+          currentState = states.END;
         }
+        // }
         break;
       }
       case RELEASEBALL: {

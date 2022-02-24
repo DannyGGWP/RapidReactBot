@@ -33,6 +33,7 @@ private SparkMaxPIDController m_pPidController;
 public double kP,kI,kD,kIZ, kFF,kMaxOutput, kMinOutput, kMaxRPM;
 private Solenoid m_shootySolenoid;
 private DigitalInput m_shooterSensor;
+private DigitalInput m_totSwitch;
 private boolean m_isRunning;
 private Debouncer m_totDebouncer; 
 
@@ -57,12 +58,14 @@ public Shooter(){
   m_pPidController.setOutputRange(kMinOutput, kMaxOutput);
   m_shootySolenoid = new Solenoid(Constants.kPCM, PneumaticsModuleType.CTREPCM, Constants.kShootySolenoidIndex);
   m_shooterSensor = new DigitalInput(Constants.kSenseyShooty);
+  m_totSwitch = new DigitalInput(Constants.kTOTSwitch);
   m_totDebouncer = new Debouncer(0.5,DebounceType.kBoth);
 }
   @Override 
   public void periodic(){
     SmartDashboard.putNumber("Wheel Speed", shooterMotor.getEncoder().getVelocity()); 
     SmartDashboard.putNumber("Wheel Motor", shooterMotor.get());
+    SmartDashboard.putBoolean("TOT Raised", isTOTRaised());
 
     //idleSpin();
   }
@@ -109,5 +112,9 @@ public Shooter(){
     m_pPidController.setReference(Constants.kreverseSetPoint, ControlType.kVelocity);
     m_isRunning = true;
     //shooterMotor.set(-0.1);
+  }
+
+  public boolean isTOTRaised() {
+    return !m_totSwitch.get();
   }
 }
