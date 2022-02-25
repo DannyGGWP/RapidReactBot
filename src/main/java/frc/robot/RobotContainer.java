@@ -177,7 +177,7 @@ public ManualShooter m_ManualShootyCommand;
     new JoystickButton(m_xboxController, Button.kBack.value)
       .whileActiveOnce(
         new InstantCommand(m_driveTrain::resetHeading)
-        .andThen(new TurnToAngle(90, m_driveTrain, 0.003, 0.0001, 0.000, 4))
+        .andThen(new TurnToAngle(180, m_driveTrain, 0.01, 0.0000, 0.0025, 0))
       );
   }
 
