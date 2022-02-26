@@ -111,10 +111,10 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public double getEncPos() {
-    double encFL = -m_motorFL.getSelectedSensorPosition(0);
-    double encFR = m_motorFR.getSelectedSensorPosition(0);
-    double encBL = -m_motorBL.getSelectedSensorPosition(0);
-    double encBR = m_motorBR.getSelectedSensorPosition(0);
+    double encFL = m_motorFL.getSelectedSensorPosition(0);
+    double encFR = -m_motorFR.getSelectedSensorPosition(0);
+    double encBL = m_motorBL.getSelectedSensorPosition(0);
+    double encBR = -m_motorBR.getSelectedSensorPosition(0);
     SmartDashboard.putNumber("Front Left Enc", encFL);
     SmartDashboard.putNumber("Front Right Enc", encFR);
     SmartDashboard.putNumber("Back Left Enc", encBL);
@@ -185,6 +185,7 @@ public void resetHeading(){
     SmartDashboard.putNumber("current heading", getHeading());
     double leftDistance = ConversionHelper.convertTalonEncoderTicksToMeters((int)m_motorFL.getSelectedSensorPosition(), Constants.DTConsts.kWheelDiameter, Constants.DTConsts.kTicksPerRevolution, true); 
     double rightDistance = ConversionHelper.convertTalonEncoderTicksToMeters((int)m_motorFR.getSelectedSensorPosition(), Constants.DTConsts.kWheelDiameter, Constants.DTConsts.kTicksPerRevolution, true);
+    getEncPos();
 
     // Update the pose
     m_odometry.update(gyroAngle, leftDistance, rightDistance);

@@ -25,6 +25,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.AutoCommandGroup1;
+import frc.robot.commands.AutoDriveCommand;
 import frc.robot.commands.AutoGrabbyCommand;
 import frc.robot.commands.EjectBallCommand;
 import frc.robot.commands.ExampleCommand;
@@ -55,6 +57,8 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+
+  private AutoCommandGroup1 m_autoCommand1;
 
   private XboxController m_xboxController;
   public static Joystick panel = new Joystick(1);
@@ -92,6 +96,8 @@ public ManualShooter m_ManualShootyCommand;
     m_hanger = new Hanger();
     m_ManualShootyCommand=new ManualShooter(m_shooter, m_grabber);
     m_isRedAlliance = DriverStation.getAlliance() == DriverStation.Alliance.Red;
+    m_autoCommand1 = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain);
+
     // Configure the button bindings
     configureButtonBindings();
     if (m_isRedAlliance) {
@@ -177,8 +183,19 @@ public ManualShooter m_ManualShootyCommand;
     new JoystickButton(m_xboxController, Button.kBack.value)
       .whileActiveOnce(
         new InstantCommand(m_driveTrain::resetHeading)
-        .andThen(new TurnToAngle(180, m_driveTrain, 0.01, 0.0000, 0.0025, 0))
+        // .andThen(new TurnToAngle(180, m_driveTrain, 0.0113, 0.0000, 0.0025, 0))
+        .andThen(new TurnToAngle(
+          180,
+          m_driveTrain,
+          SmartDashboard.getNumber("TurnToAngle P", 0.0113),
+          SmartDashboard.getNumber("TurnToAngle I", 0.0000),
+          SmartDashboard.getNumber("TurnToAngle D", 0.0025),
+          SmartDashboard.getNumber("TurnToAngle Deadband", 0)
+        ))
       );
+    new JoystickButton(m_xboxController, Button.kStart.value)
+      .whileActiveOnce(new AutoDriveCommand(m_driveTrain, 180000, 0.5)
+    );
   }
 
   public Command createAutoNavigationCommand(Pose2d start, List<Translation2d> waypoints, Pose2d end) {
@@ -215,6 +232,7 @@ public ManualShooter m_ManualShootyCommand;
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    // return m_autoCommand;
+    return m_autoCommand1;
   }
 }

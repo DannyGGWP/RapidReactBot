@@ -48,10 +48,11 @@ public class ShootyCommand extends CommandBase {
       case START: {
         if (m_shooter.isBallReady()) {
           currentState = states.RAMPWHEEL;
-        }else if (m_grabber.ballAtGrabber()){
-          m_grabber.grabbyGrab(false);
-          currentState = states.RAMPWHEEL;
         }
+        // else if (m_grabber.ballAtGrabber()){
+        //   m_grabber.grabbyGrab(false);
+        //   currentState = states.RAMPWHEEL;
+        // }
         break;
       }
       case RAMPWHEEL: {
