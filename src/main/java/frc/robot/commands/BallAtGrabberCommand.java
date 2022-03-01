@@ -4,25 +4,23 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Grabber;
 
-public class DelayCommand extends CommandBase {
+public class BallAtGrabberCommand extends CommandBase {
 
-  double m_timestamp;
-  double m_delay;
+  Grabber m_grabber;
 
-  /** Creates a new DelayCommand. */
-  public DelayCommand(double delay) {
+  /** Creates a new BallAtGrabberCommand. */
+  public BallAtGrabberCommand(Grabber grabber) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_delay = delay;
+    m_grabber = grabber;
+    addRequirements(m_grabber);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    m_timestamp = Timer.getFPGATimestamp();
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -35,6 +33,6 @@ public class DelayCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Timer.getFPGATimestamp() > m_timestamp + m_delay;
+    return m_grabber.ballAtGrabber();
   }
 }

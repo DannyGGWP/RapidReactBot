@@ -6,10 +6,13 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Grabber;
 import frc.robot.subsystems.Shooter;
@@ -23,19 +26,25 @@ public class AutoCommandGroup1 extends SequentialCommandGroup {
   /** Creates a new AutoCommandGroup1. */
   public AutoCommandGroup1(Grabber grabber, Shooter shooter, DriveTrain drive) {
     m_driveTrain = drive;
+    m_driveTrain.resetHeading();
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ParallelDeadlineGroup(
-        new AutoGrabbyCommand(grabber, shooter),
+        new ParallelCommandGroup(
+          new ScheduleCommand(
+            new AutoGrabbyCommand(grabber, shooter)
+          ),
+          new BallAtGrabberCommand(grabber)
+        ),
         new SequentialCommandGroup(
-          new DelayCommand(1),
+          new WaitCommand(1),
           new TargetFinder(m_driveTrain)
         )
       ) ,
-      new AutoDriveCommand(m_driveTrain, -120000, 0.5) , // 30000 less that travelled ~150000
+      new AutoDriveCommand(m_driveTrain, -50000, 0.5) , // 30000 less that travelled ~150000
       new ParallelRaceGroup(
-        new DelayCommand(1),
+        new WaitCommand(1),
         new TurnToAngle(
           180,
           m_driveTrain,
