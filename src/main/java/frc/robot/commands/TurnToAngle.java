@@ -23,11 +23,11 @@ public class TurnToAngle extends PIDCommand {
         // This should return the setpoint (can also be a constant)
       
         // This uses the output
-        output -> {vroomVroom.drive(-output, 0);
+        output -> {vroomVroom.driveRaw(-output, 0);
           // Use the output here
         });
         getController().enableContinuousInput(-180, 180);
-        getController().setTolerance(deadband, 0);
+        getController().setTolerance(deadband, 4);
       
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.

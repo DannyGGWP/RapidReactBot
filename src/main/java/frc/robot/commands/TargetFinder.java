@@ -15,10 +15,12 @@ import frc.robot.subsystems.DriveTrain;
 public class TargetFinder extends CommandBase {
   private DriveTrain m_dDriveTrain; 
   private boolean m_hasTarget; 
-  private boolean m_atTarget; 
+  private boolean m_atTarget;
+  private double m_driveP;
   /** Creates a new TargetFinder. */
-  public TargetFinder(DriveTrain drive) {
+  public TargetFinder(DriveTrain drive, double driveP) {
     m_dDriveTrain = drive;
+    m_driveP = driveP;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_dDriveTrain);
     
@@ -50,13 +52,13 @@ public class TargetFinder extends CommandBase {
 
     double turnValue = tx * Constants.LimeLight.kSteerP; 
     SmartDashboard.putNumber("Tracking Turn Value", turnValue);
-    double driveValue = (Constants.LimeLight.kDesiredTarget - ta) * Constants.LimeLight.kDriveP; 
+    double driveValue = m_driveP; 
     if (driveValue < Constants.LimeLight.kMinSpeed)
       m_atTarget = true; 
     if (driveValue > Constants.LimeLight.kMaxDrive)
       driveValue = Constants.LimeLight.kMaxDrive; 
     SmartDashboard.putNumber("Tracking Drive Value", driveValue);
-    m_dDriveTrain.drive(turnValue, driveValue);
+    m_dDriveTrain.driveRaw(turnValue, driveValue);
     
   }
 

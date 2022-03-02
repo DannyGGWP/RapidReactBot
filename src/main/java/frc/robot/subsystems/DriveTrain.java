@@ -148,6 +148,9 @@ public void resetHeading(){
     m_differentialDrive.arcadeDrive(Math.signum(xSpeed) * Math.pow(xSpeed, 2), Math.signum(zRotation) * Math.pow(zRotation, 2), false);
     //m_differentialDrive.arcadeDrive(xSpeed, zRotation, squareInputs);
   }
+  public void driveRaw(double zRotation, double xSpeed) {
+    m_differentialDrive.arcadeDrive(zRotation,xSpeed, false);
+  }
 
   public void tankDriveVolts(double left, double right)
   {

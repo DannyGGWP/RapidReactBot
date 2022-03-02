@@ -81,7 +81,8 @@ public class RobotContainer {
   public Shooter m_shooter;
   public AutoGrabbyCommand m_grabCommand;
   public ShootyCommand m_shootyCommand;
-  public Hanger m_hanger;
+  public Hanger m_hangerOne;
+  // public Hanger m_hangerTwo;
   private boolean m_isRedAlliance;
 
 public ManualShooter m_ManualShootyCommand;
@@ -93,7 +94,8 @@ public ManualShooter m_ManualShootyCommand;
     m_grabber = new Grabber();
     m_grabCommand = new AutoGrabbyCommand(m_grabber, m_shooter);
     m_shootyCommand = new ShootyCommand(m_shooter, m_grabber);
-    m_hanger = new Hanger();
+    m_hangerOne = new Hanger(Constants.kHangerOneSpark);
+    // m_hangerTwo = new Hanger(Constants.kHangerTwoSpark);
     m_ManualShootyCommand=new ManualShooter(m_shooter, m_grabber);
     m_isRedAlliance = DriverStation.getAlliance() == DriverStation.Alliance.Red;
     m_autoCommand1 = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain);
@@ -113,7 +115,11 @@ public ManualShooter m_ManualShootyCommand;
         )
         );
   }
-
+  public void resetOdometry()
+  {
+    m_driveTrain.resetHeading();
+    m_driveTrain.resetEncoders();
+  }
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -130,7 +136,7 @@ public ManualShooter m_ManualShootyCommand;
       .whileActiveOnce(new EjectBallCommand(m_shooter, m_grabber));
     new JoystickButton(m_xboxController, Button.kB.value)
       .whileActiveOnce(
-        new TargetFinder(m_driveTrain)
+        new TargetFinder(m_driveTrain, 0.5)
       );
     new JoystickButton(m_xboxController, Button.kRightBumper.value)
       .whenPressed(
@@ -155,24 +161,24 @@ public ManualShooter m_ManualShootyCommand;
       .whileActiveOnce(m_ManualShootyCommand);
     new JoystickButton(panel, Constants.kHangOneUp)
       .whenPressed(
-        () -> m_hanger.raiseHanger() 
+        () -> m_hangerOne.raiseHanger() 
       )
       .whenReleased(
-        () -> m_hanger.stopHang()
+        () -> m_hangerOne.stopHang()
       );
     new JoystickButton(panel, Constants.kHangOnedown)
       .whenPressed(
-        () -> m_hanger.lowerHanger() 
+        () -> m_hangerOne.lowerHanger() 
       )
       .whenReleased(
-        () -> m_hanger.stopHang()
+        () -> m_hangerOne.stopHang()
       );
     new JoystickButton(panel, Constants.kKillSwitch)
       .whenPressed(
-        () -> m_hanger.enableHanger()
+        () -> m_hangerOne.enableHanger()
       )
       .whenReleased(
-        () -> m_hanger.disableHanger()
+        () -> m_hangerOne.disableHanger()
       );
     new JoystickButton(panel, Constants.kEject)
       .whileActiveOnce(new EjectBallCommand(m_shooter, m_grabber)
@@ -182,7 +188,7 @@ public ManualShooter m_ManualShootyCommand;
     
     new JoystickButton(m_xboxController, Button.kBack.value)
       .whileActiveOnce(
-        new InstantCommand(m_driveTrain::resetHeading)
+        new InstantCommand(m_driveTrain::resetHeading).andThen(new InstantCommand(m_driveTrain::resetEncoders, m_driveTrain))
         // .andThen(new TurnToAngle(180, m_driveTrain, 0.0113, 0.0000, 0.0025, 0))
         .andThen(new TurnToAngle(
           180,

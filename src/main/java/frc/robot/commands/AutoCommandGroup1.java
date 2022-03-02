@@ -26,10 +26,12 @@ public class AutoCommandGroup1 extends SequentialCommandGroup {
   /** Creates a new AutoCommandGroup1. */
   public AutoCommandGroup1(Grabber grabber, Shooter shooter, DriveTrain drive) {
     m_driveTrain = drive;
-    m_driveTrain.resetHeading();
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
+      // new InstantCommand(m_driveTrain::resetEncoders, m_driveTrain),
+      // new InstantCommand(m_driveTrain::resetHeading, m_driveTrain),
+      
       new ParallelDeadlineGroup(
         new ParallelCommandGroup(
           new ScheduleCommand(
@@ -39,19 +41,21 @@ public class AutoCommandGroup1 extends SequentialCommandGroup {
         ),
         new SequentialCommandGroup(
           new WaitCommand(1),
-          new TargetFinder(m_driveTrain)
+          // new DelayCommand(1
+          new TargetFinder(m_driveTrain, 0.3)
         )
       ) ,
-      new AutoDriveCommand(m_driveTrain, -50000, 0.5) , // 30000 less that travelled ~150000
+      new AutoDriveCommand(m_driveTrain, -50000, 0.4) , // 30000 less that travelled ~150000
       new ParallelRaceGroup(
-        new WaitCommand(1),
+        new WaitCommand(5),
+        // new DelayCommand(1),
         new TurnToAngle(
           180,
           m_driveTrain,
-          0.0113,
+          0.009,
           0.0000,
           0.0025,
-          0
+          4
         )
       ),
       new ShootyCommand(shooter, grabber)

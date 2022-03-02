@@ -30,6 +30,7 @@ public class AutoDriveCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    //m_driveTrain.resetEncoders();
     m_encoderPosition = m_driveTrain.getEncPos();
   }
 
@@ -37,15 +38,15 @@ public class AutoDriveCommand extends CommandBase {
   @Override
   public void execute() {
     if (m_forwards) {
-      m_driveTrain.drive(0, m_speed);
+      m_driveTrain.driveRaw(0, m_speed);
       if (m_driveTrain.getEncPos() > m_encoderPosition + m_distance) {
-        m_driveTrain.drive(0, 0);
+        m_driveTrain.driveRaw(0, 0);
         m_finished = true;
       }
     } else {
-      m_driveTrain.drive(0, -m_speed);
+      m_driveTrain.driveRaw(0, -m_speed);
       if (m_driveTrain.getEncPos() < m_encoderPosition + m_distance) {
-        m_driveTrain.drive(0, 0);
+        m_driveTrain.driveRaw(0, 0);
         m_finished = true;
       }
     }
