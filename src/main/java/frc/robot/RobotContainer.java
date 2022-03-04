@@ -58,7 +58,10 @@ public class RobotContainer {
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
-  private AutoCommandGroup1 m_autoCommand1;
+  private AutoCommandGroup1 m_autoCommandFarLeft;
+  private AutoCommandGroup1 m_autoCommandCloseLeft;
+  private AutoCommandGroup1 m_autoCommandCloseRight;
+  private AutoCommandGroup1 m_autoCommandCenter;
 
   private XboxController m_xboxController;
   public static Joystick panel = new Joystick(1);
@@ -98,7 +101,10 @@ public ManualShooter m_ManualShootyCommand;
     // m_hangerTwo = new Hanger(Constants.kHangerTwoSpark);
     m_ManualShootyCommand=new ManualShooter(m_shooter, m_grabber);
     m_isRedAlliance = DriverStation.getAlliance() == DriverStation.Alliance.Red;
-    m_autoCommand1 = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain);
+    m_autoCommandFarLeft = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, -165, -35000);
+    m_autoCommandCloseLeft = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, -145, -40000);
+    m_autoCommandCloseRight = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, 180, -50000);
+    m_autoCommandCenter = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, 180, -50000); // Not done
 
     // Configure the button bindings
     configureButtonBindings();
@@ -239,6 +245,14 @@ public ManualShooter m_ManualShootyCommand;
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     // return m_autoCommand;
-    return m_autoCommand1;
+    if (panel.getRawButton(Constants.kAutoSwitchOne)) {
+      return m_autoCommandFarLeft;
+    } else if (panel.getRawButton(Constants.kAutoSwitchTwo)) {
+      return m_autoCommandCloseLeft;
+    } else if (panel.getRawButton(Constants.kAutoSwitchThree)) {
+      return m_autoCommandCloseRight;
+    } else {
+      return m_autoCommandCenter;
+    }
   }
 }

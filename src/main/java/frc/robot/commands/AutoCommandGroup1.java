@@ -24,7 +24,7 @@ public class AutoCommandGroup1 extends SequentialCommandGroup {
   private DriveTrain m_driveTrain;
   private double m_encPos;
   /** Creates a new AutoCommandGroup1. */
-  public AutoCommandGroup1(Grabber grabber, Shooter shooter, DriveTrain drive) {
+  public AutoCommandGroup1(Grabber grabber, Shooter shooter, DriveTrain drive, double turnAngle, double reverseDistance) {
     m_driveTrain = drive;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
@@ -45,14 +45,14 @@ public class AutoCommandGroup1 extends SequentialCommandGroup {
           new TargetFinder(m_driveTrain, 0.3)
         )
       ) ,
-      new AutoDriveCommand(m_driveTrain, -50000, 0.4) , // 30000 less that travelled ~150000
+      new AutoDriveCommand(m_driveTrain, reverseDistance, 0.4) , // 30000 less that travelled ~150000
       new ParallelRaceGroup(
-        new WaitCommand(5),
+        new WaitCommand(2),
         // new DelayCommand(1),
         new TurnToAngle(
-          180,
+          turnAngle,
           m_driveTrain,
-          0.009,
+          0.015,
           0.0000,
           0.0025,
           4
