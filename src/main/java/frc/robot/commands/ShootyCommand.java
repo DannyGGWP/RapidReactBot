@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Grabber;
+import frc.robot.subsystems.Leds;
 import frc.robot.subsystems.Shooter;
 
 public class ShootyCommand extends CommandBase {
@@ -56,6 +57,7 @@ public class ShootyCommand extends CommandBase {
         break;
       }
       case RAMPWHEEL: {
+        Leds.getInstance().setColor(Constants.Colors.kShoot);
         m_shooter.onWheel();
         if (m_shooter.wheelSpin() > Constants.kSetPoint - 100 && m_shooter.isBallReady()) {
           timestamp = Timer.getFPGATimestamp();
@@ -84,10 +86,14 @@ public class ShootyCommand extends CommandBase {
       }
       case RELEASEBALL: {
         m_grabber.grabbyGrab(false);
+        Leds.getInstance().setColor(Constants.Colors.kOneBall);
         currentState = states.RAMPWHEEL;
         break;
       }
-      case END: {}
+      case END: {
+        Leds.getInstance().resetColor();
+        break;
+      }
     }
   }
 

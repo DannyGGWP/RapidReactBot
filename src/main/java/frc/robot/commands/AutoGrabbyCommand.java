@@ -8,8 +8,10 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Grabber;
+import frc.robot.subsystems.Leds;
 import frc.robot.subsystems.Shooter;
 
 public class AutoGrabbyCommand extends CommandBase {
@@ -78,6 +80,9 @@ public class AutoGrabbyCommand extends CommandBase {
       case OPENGRABBER: {
         if (!m_shooter.isBallReady()) {
           m_grabber.grabbyGrab(false);
+          Leds.getInstance().setColor(Constants.Colors.kOneBall);
+        } else {
+          Leds.getInstance().setColor(Constants.Colors.kTwoBalls);
         }
         currentState = states.END;
         break;

@@ -38,6 +38,7 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Grabber;
 import frc.robot.subsystems.Hanger;
+import frc.robot.subsystems.Leds;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.TalonRamseteControllerAbstraction;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -85,7 +86,7 @@ public class RobotContainer {
   public AutoGrabbyCommand m_grabCommand;
   public ShootyCommand m_shootyCommand;
   public Hanger m_hangerOne;
-  // public Hanger m_hangerTwo;
+  public Hanger m_hangerTwo;
   private boolean m_isRedAlliance;
 
 public ManualShooter m_ManualShootyCommand;
@@ -97,13 +98,21 @@ public ManualShooter m_ManualShootyCommand;
     m_grabber = new Grabber();
     m_grabCommand = new AutoGrabbyCommand(m_grabber, m_shooter);
     m_shootyCommand = new ShootyCommand(m_shooter, m_grabber);
-    m_hangerOne = new Hanger(Constants.kHangerOneSpark);
-    // m_hangerTwo = new Hanger(Constants.kHangerTwoSpark);
+
+    m_hangerOne = new Hanger(Constants.kHangerOneSpark, true);
+    m_hangerOne.setForwardsLimit(-850);
+    m_hangerOne.setBackwardsLimit(0);
+    m_hangerOne.enableLimit();
+    m_hangerTwo = new Hanger(Constants.kHangerTwoSpark, false);
+    m_hangerTwo.setForwardsLimit(120);
+    m_hangerTwo.setBackwardsLimit(0);
+    m_hangerTwo.enableLimit();
+  
     m_ManualShootyCommand=new ManualShooter(m_shooter, m_grabber);
     m_isRedAlliance = DriverStation.getAlliance() == DriverStation.Alliance.Red;
     m_autoCommandFarLeft = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, -165, -35000);
     m_autoCommandCloseLeft = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, -145, -40000);
-    m_autoCommandCloseRight = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, 180, -50000);
+    m_autoCommandCloseRight = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, -170, -40000);
     m_autoCommandCenter = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, 180, -50000); // Not done
 
     // Configure the button bindings
@@ -158,6 +167,13 @@ public ManualShooter m_ManualShootyCommand;
       .whenReleased(
         () -> m_grabber.lowerGrabber(false)
       );
+    new JoystickButton(m_xboxController, Button.kX.value)
+      .whenPressed(
+        () -> m_shooter.raiseTOT(true)
+      )
+      .whenReleased(
+        () -> m_shooter.raiseTOT(false)
+      );
 
       // control pannel buttons 
 
@@ -166,26 +182,61 @@ public ManualShooter m_ManualShootyCommand;
     new JoystickButton(panel, Constants.kManualShoot)
       .whileActiveOnce(m_ManualShootyCommand);
     new JoystickButton(panel, Constants.kHangOneUp)
-      .whenPressed(
-        () -> m_hangerOne.raiseHanger() 
+      .whileHeld(
+        new InstantCommand(m_hangerOne::raiseHanger, m_hangerOne)
       )
       .whenReleased(
         () -> m_hangerOne.stopHang()
       );
     new JoystickButton(panel, Constants.kHangOnedown)
-      .whenPressed(
-        () -> m_hangerOne.lowerHanger() 
+      .whileHeld(
+        new InstantCommand(m_hangerOne::lowerHanger, m_hangerOne)
       )
       .whenReleased(
         () -> m_hangerOne.stopHang()
       );
-    new JoystickButton(panel, Constants.kKillSwitch)
-      .whenPressed(
-        () -> m_hangerOne.enableHanger()
+
+    new JoystickButton(panel, Constants.kHangTwoUp)
+      .whileHeld(
+        new InstantCommand(m_hangerTwo::raiseHanger, m_hangerTwo)
       )
       .whenReleased(
-        () -> m_hangerOne.disableHanger()
+        () -> m_hangerTwo.stopHang()
       );
+    new JoystickButton(panel, Constants.kHangTwoDown)
+      .whileHeld(
+        new InstantCommand(m_hangerTwo::lowerHanger, m_hangerTwo)
+      )
+      .whenReleased(
+        () -> m_hangerTwo.stopHang()
+      );
+
+    new JoystickButton(panel, Constants.kKillSwitch)
+      .whenPressed(
+        () -> {
+          m_hangerOne.enableHanger();
+          m_hangerTwo.enableHanger();
+        }
+      )
+      .whenReleased(
+        () -> {
+          m_hangerOne.disableHanger();
+          m_hangerTwo.disableHanger();
+        }
+      );
+    new JoystickButton(panel, Constants.kHangOverride)
+        .whenPressed(
+          () -> {
+            m_hangerOne.disableLimit();
+            m_hangerTwo.disableLimit();
+          }
+        )
+        .whenReleased(
+          () -> {
+            m_hangerOne.enableLimit();
+            m_hangerTwo.enableLimit();
+          }
+        );
     new JoystickButton(panel, Constants.kEject)
       .whileActiveOnce(new EjectBallCommand(m_shooter, m_grabber)
     );

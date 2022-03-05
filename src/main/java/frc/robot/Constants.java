@@ -24,7 +24,7 @@ public final class Constants {
     public static final int kPCM = 52;
     public static final int kshooterSpark = 7;
     public static final int kHangerOneSpark = 8;
-    // public static final int kHangerTwoSpark;
+    public static final int kHangerTwoSpark = 9;
 
     /** The upper limit at which the drive will stop using kDriveReduction */
     public static final double kDriveThreshold = 0.9;
@@ -41,6 +41,7 @@ public final class Constants {
     public static final int kreverseSetPoint = -1000;
     public static final int kslowSpeed = 1500;
     public static final double kIdleSpeed = 0.1;
+    public static final int kBlinkinID = 0;
 
     // control panel buttons 
     public static final int kAutoSwitchOne = 9;
@@ -56,6 +57,8 @@ public final class Constants {
     public static final int kHangTwoDown = 7;
     public static final int kAutoPickup = 8;
     public static final int kEject = 1;
+    public static final int kHangOverride = 4;
+    public static final int kAutoBallSwitch = 5;
     
 
      public final class DTConsts {
@@ -83,6 +86,14 @@ public final class Constants {
         public static final double kDesiredTarget = 15.0;
         public static final double kMaxDrive = 0.65;
         public static final double kMinSpeed = 0.05; 
+    }
+    public final class Colors {
+        public static final double kBlue = 0.85;
+        public static final double kRed = 0.61;
+        public static final double kOneBall = 0.65;
+        public static final double kTwoBalls = 0.77;
+        public static final double kShoot = 0.93;
+        public static final double kHang = 0.91;
     }
     public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(DTConsts.kTrackWidth);
     
