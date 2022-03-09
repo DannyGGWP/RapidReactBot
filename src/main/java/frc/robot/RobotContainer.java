@@ -30,6 +30,7 @@ import frc.robot.commands.AutoDriveCommand;
 import frc.robot.commands.AutoGrabbyCommand;
 import frc.robot.commands.EjectBallCommand;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.LongBall;
 import frc.robot.commands.ManualShooter;
 import frc.robot.commands.ShootyCommand;
 import frc.robot.commands.TargetFinder;
@@ -114,6 +115,8 @@ public ManualShooter m_ManualShootyCommand;
     m_autoCommandCloseLeft = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, -145, -40000);
     m_autoCommandCloseRight = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, -170, -40000);
     m_autoCommandCenter = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, 180, -50000); // Not done
+
+    Leds.getInstance().setIsRedAlliance(m_isRedAlliance);
 
     // Configure the button bindings
     configureButtonBindings();
@@ -297,6 +300,9 @@ public ManualShooter m_ManualShootyCommand;
     // An ExampleCommand will run in autonomous
     // return m_autoCommand;
     if (panel.getRawButton(Constants.kAutoSwitchOne)) {
+      if (panel.getRawButton(Constants.kAutoBallSwitch)) {
+        return m_autoCommandFarLeft.andThen(new LongBall(m_driveTrain, 80, -35000, 60000, m_grabber, m_shooter));
+      }
       return m_autoCommandFarLeft;
     } else if (panel.getRawButton(Constants.kAutoSwitchTwo)) {
       return m_autoCommandCloseLeft;

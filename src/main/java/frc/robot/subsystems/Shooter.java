@@ -43,6 +43,9 @@ public Shooter(){
   shooterMotor.setInverted(false);
   m_pPidController = shooterMotor.getPIDController();
   kP = 5e-5;
+  //kP = 0.01;
+  //kI = 0.0;
+  //kD = 0.0; 
   kI = 3e-7;
   kD = 0.008;
   kIZ = 0;

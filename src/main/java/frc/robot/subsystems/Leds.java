@@ -38,6 +38,10 @@ public class Leds extends SubsystemBase {
     Leds.getInstance().setColor(m_isRedAlliance ? Constants.Colors.kRed : Constants.Colors.kBlue);
   }
 
+  public void setIsRedAlliance(boolean isRedAlliance) {
+    m_isRedAlliance = isRedAlliance;
+  }
+
   @Override
   public void periodic() {
     m_blinkin.set(m_colorValue);

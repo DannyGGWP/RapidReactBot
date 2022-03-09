@@ -91,7 +91,6 @@ public class ShootyCommand extends CommandBase {
         break;
       }
       case END: {
-        Leds.getInstance().resetColor();
         break;
       }
     }
@@ -102,6 +101,7 @@ public class ShootyCommand extends CommandBase {
   public void end(boolean interrupted) {
     m_shooter.offWheel();
     m_shooter.raiseTOT(false);
+    Leds.getInstance().resetColor();
     currentState = states.END;
   }
 

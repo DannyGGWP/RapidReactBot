@@ -37,7 +37,8 @@ public class AutoCommandGroup1 extends SequentialCommandGroup {
           new ScheduleCommand(
             new AutoGrabbyCommand(grabber, shooter)
           ),
-          new BallAtGrabberCommand(grabber)
+          new BallAtGrabberCommand(grabber),
+          new InstantCommand(shooter::onWheel, shooter)
         ),
         new SequentialCommandGroup(
           new WaitCommand(1),
