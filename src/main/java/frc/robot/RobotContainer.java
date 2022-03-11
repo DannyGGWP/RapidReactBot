@@ -46,6 +46,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
@@ -111,12 +112,15 @@ public ManualShooter m_ManualShootyCommand;
   
     m_ManualShootyCommand=new ManualShooter(m_shooter, m_grabber);
     m_isRedAlliance = DriverStation.getAlliance() == DriverStation.Alliance.Red;
+
     m_autoCommandFarLeft = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, -165, -35000);
     m_autoCommandCloseLeft = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, -145, -40000);
     m_autoCommandCloseRight = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, -170, -40000);
-    m_autoCommandCenter = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, 180, -50000); // Not done
+    // m_autoCommandCenter = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, 180, -50000); // Not done
 
     Leds.getInstance().setIsRedAlliance(m_isRedAlliance);
+    Leds.getInstance().resetColor();
+    
 
     // Configure the button bindings
     configureButtonBindings();
@@ -225,6 +229,7 @@ public ManualShooter m_ManualShootyCommand;
         () -> {
           m_hangerOne.disableHanger();
           m_hangerTwo.disableHanger();
+          Leds.getInstance().resetColor();
         }
       );
     new JoystickButton(panel, Constants.kHangOverride)
@@ -305,11 +310,26 @@ public ManualShooter m_ManualShootyCommand;
       }
       return m_autoCommandFarLeft;
     } else if (panel.getRawButton(Constants.kAutoSwitchTwo)) {
+      if (panel.getRawButton(Constants.kAutoBallSwitch)) {
+        return m_autoCommandCloseLeft.andThen(new LongBall(m_driveTrain, -10, 0, 75000, m_grabber, m_shooter));
+      }
       return m_autoCommandCloseLeft;
     } else if (panel.getRawButton(Constants.kAutoSwitchThree)) {
+      if (panel.getRawButton(Constants.kAutoBallSwitch)) {
+        return m_autoCommandCloseRight.andThen(new LongBall(m_driveTrain, 80, 0, 75000, m_grabber, m_shooter));
+      }
       return m_autoCommandCloseRight;
+    } else if (panel.getRawButton(Constants.kAautoSwitchFour)) {
+      // return m_autoCommandCenter;
+      return new SequentialCommandGroup(
+        new ShootyCommand(m_shooter, m_grabber),
+        new AutoDriveCommand(m_driveTrain, -40000, 0.4)
+      );
     } else {
-      return m_autoCommandCenter;
+      if (panel.getRawButton(Constants.kAutoBallSwitch)) {
+        return m_autoCommandFarLeft.andThen(new LongBall(m_driveTrain, 80, -35000, 60000, m_grabber, m_shooter));
+      }
+      return m_autoCommandFarLeft;
     }
   }
 }

@@ -37,7 +37,7 @@ public final class Constants {
     public static final int kSenseyGrabby = 0;
     public static final int kSenseyShooty = 1;
     public static final int kTOTSwitch = 6;
-    public static final int kSetPoint = 4750;
+    public static final int kSetPoint = 4300;
     public static final int kreverseSetPoint = -1000;
     public static final int kslowSpeed = 1500;
     public static final double kIdleSpeed = 0.1;
@@ -90,8 +90,8 @@ public final class Constants {
     public final class Colors {
         public static final double kBlue = 0.85;
         public static final double kRed = 0.61;
-        public static final double kOneBall = 0.65;
-        public static final double kTwoBalls = 0.77;
+        public static final double kOneBall = 0.15;
+        public static final double kTwoBalls = 0.35;
         public static final double kShoot = 0.93;
         public static final double kHang = 0.91;
     }

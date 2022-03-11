@@ -4,7 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -22,6 +24,8 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+
+  private boolean m_isRedAlliance;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -65,6 +69,15 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
+    m_isRedAlliance = DriverStation.getAlliance() == DriverStation.Alliance.Red;
+    Leds.getInstance().setIsRedAlliance(m_isRedAlliance);
+    Leds.getInstance().resetColor();
+    if (m_isRedAlliance) {
+      NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(0);
+    } else {
+      NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(1);
+    }
+
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -77,6 +90,16 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+
+    m_isRedAlliance = DriverStation.getAlliance() == DriverStation.Alliance.Red;
+    Leds.getInstance().setIsRedAlliance(m_isRedAlliance);
+    Leds.getInstance().resetColor();
+    if (m_isRedAlliance) {
+      NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(0);
+    } else {
+      NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(1);
+    }
+
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
