@@ -89,7 +89,7 @@ public class DriveTrain extends SubsystemBase {
     m_differentialDrive = new DifferentialDrive(m_controllerGroupL, m_controllerGroupR);
     //m_differentialDrive.setDeadband(0.0);
 
-    m_gyro = new AHRS(Port.kMXP);
+    m_gyro = new AHRS(Port.kUSB);
     resetEncoders();
     m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d()); 
   }

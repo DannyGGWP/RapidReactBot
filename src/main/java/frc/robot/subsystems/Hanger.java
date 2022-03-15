@@ -66,7 +66,7 @@ public class Hanger extends SubsystemBase {
         return;
       }
     }
-    m_hangerMotor.set(m_inverted * 0.5);
+    m_hangerMotor.set(m_inverted * 0.75);
   }
   public void lowerHanger() {
     if (!m_enabled) {
@@ -76,7 +76,7 @@ public class Hanger extends SubsystemBase {
       m_hangerMotor.set(0);
       return;
     }
-    m_hangerMotor.set(m_inverted * -0.5);
+    m_hangerMotor.set(m_inverted * -0.6);
   }
   public void stopHang(){
     m_hangerMotor.set(0.0);

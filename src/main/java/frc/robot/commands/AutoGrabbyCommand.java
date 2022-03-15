@@ -64,6 +64,11 @@ public class AutoGrabbyCommand extends CommandBase {
       }
       case CLOSEGRABBER: {
         m_grabber.grabbyGrab(true);
+        if (!m_shooter.isBallReady()) {
+          Leds.getInstance().setColor(Constants.Colors.kOneBall);
+        } else {
+          Leds.getInstance().setColor(Constants.Colors.kTwoBalls);
+        }
         if (Timer.getFPGATimestamp() > timestamp + 0.5) {
           currentState = states.RAISEARMS;
           timestamp = Timer.getFPGATimestamp();
@@ -80,9 +85,9 @@ public class AutoGrabbyCommand extends CommandBase {
       case OPENGRABBER: {
         if (!m_shooter.isBallReady()) {
           m_grabber.grabbyGrab(false);
-          Leds.getInstance().setColor(Constants.Colors.kOneBall);
+          // Leds.getInstance().setColor(Constants.Colors.kOneBall);
         } else {
-          Leds.getInstance().setColor(Constants.Colors.kTwoBalls);
+          // Leds.getInstance().setColor(Constants.Colors.kTwoBalls);
         }
         currentState = states.END;
         break;
