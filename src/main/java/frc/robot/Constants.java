@@ -79,6 +79,7 @@ public final class Constants {
         public static final int kTimeOut = 10; 
         public static final int kClosedLoopError = 0; 
         public static final int kStatusFrame = 10; 
+        public static final double kRampRate = 0.25; 
     }
     public final class LimeLight {
         public static final double kDriveP = 0.45; 

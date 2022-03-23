@@ -68,6 +68,11 @@ public class DriveTrain extends SubsystemBase {
     m_motorBL.config_kI(0, Constants.DTConsts.kI, Constants.DTConsts.kTimeOut); 
     m_motorBL.config_kP(0, Constants.DTConsts.kP, Constants.DTConsts.kTimeOut); 
 
+    m_motorFL.configOpenloopRamp(Constants.DTConsts.kRampRate);
+    m_motorFR.configOpenloopRamp(Constants.DTConsts.kRampRate);
+    m_motorBR.configOpenloopRamp(Constants.DTConsts.kRampRate);
+    m_motorBL.configOpenloopRamp(Constants.DTConsts.kRampRate);
+    
     m_motorFR.configAllowableClosedloopError(0, Constants.DTConsts.kClosedLoopError, Constants.DTConsts.kTimeOut); 
     m_motorFL.configAllowableClosedloopError(0, Constants.DTConsts.kClosedLoopError, Constants.DTConsts.kTimeOut); 
     m_motorBR.configAllowableClosedloopError(0, Constants.DTConsts.kClosedLoopError, Constants.DTConsts.kTimeOut); 

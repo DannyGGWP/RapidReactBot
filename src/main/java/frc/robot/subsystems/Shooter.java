@@ -41,15 +41,16 @@ public Shooter(){
 
   shooterMotor = new CANSparkMax(Constants.kshooterSpark, MotorType.kBrushless);
   shooterMotor.setInverted(false);
+  shooterMotor.setClosedLoopRampRate(0.25);
   m_pPidController = shooterMotor.getPIDController();
-  kP = 5e-5;
-  //kP = 0.01;
-  //kI = 0.0;
-  //kD = 0.0; 
-  kI = 3e-7;
-  kD = 0.008;
+  //kP = 5e-5;
+  kP = 0.01;
+  kI = 0.0;
+  kD = 1.0; 
+  //kI = 3e-7;
+  //kD = 0.008;
   kIZ = 0;
-  kFF = 0;
+  kFF = 0.05;
   kMaxOutput = 1;
   kMinOutput = -1;
   kMaxRPM = 5700; 
