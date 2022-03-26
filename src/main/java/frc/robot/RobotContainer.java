@@ -113,9 +113,9 @@ public ManualShooter m_ManualShootyCommand;
     m_ManualShootyCommand=new ManualShooter(m_shooter, m_grabber);
     m_isRedAlliance = DriverStation.getAlliance() == DriverStation.Alliance.Red;
 
-    m_autoCommandFarLeft = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, -165, -35000);
+    m_autoCommandFarLeft = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, -165, -25000);
     m_autoCommandCloseLeft = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, -145, -40000);
-    m_autoCommandCloseRight = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, -170, -40000);
+    m_autoCommandCloseRight = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, -170, -20000);
     // m_autoCommandCenter = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, 180, -50000); // Not done
 
     Leds.getInstance().setIsRedAlliance(m_isRedAlliance);
@@ -158,7 +158,7 @@ public ManualShooter m_ManualShootyCommand;
       .whileActiveOnce(new EjectBallCommand(m_shooter, m_grabber));
     new JoystickButton(m_xboxController, Button.kB.value)
       .whileActiveOnce(
-        new TargetFinder(m_driveTrain, 0.5)
+        new TargetFinder(m_driveTrain, Constants.LimeLight.kDriveP)
       );
     new JoystickButton(m_xboxController, Button.kRightBumper.value)
       .whenPressed(
@@ -176,10 +176,10 @@ public ManualShooter m_ManualShootyCommand;
       );
     new JoystickButton(m_xboxController, Button.kX.value)
       .whenPressed(
-        () -> m_shooter.raiseTOT(true)
+        () -> m_shooter.onWheel()
       )
       .whenReleased(
-        () -> m_shooter.raiseTOT(false)
+        () -> m_shooter.offWheel()
       );
 
       // control pannel buttons 

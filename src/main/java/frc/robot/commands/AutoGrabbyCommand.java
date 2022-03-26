@@ -48,6 +48,13 @@ public class AutoGrabbyCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (m_shooter.isBallReady() && m_grabber.ballAtGrabber()) {
+      Leds.getInstance().setColor(Constants.Colors.kTwoBalls);
+    } else if (m_grabber.ballAtGrabber()) {
+      Leds.getInstance().setColor(Constants.Colors.kOneBall);
+    } else if (Leds.getInstance().getColor() != Constants.Colors.kHang) {
+      Leds.getInstance().resetColor();
+    }
     switch(currentState) {
       case START: {
         currentState = states.LOWERARMS;
@@ -64,11 +71,11 @@ public class AutoGrabbyCommand extends CommandBase {
       }
       case CLOSEGRABBER: {
         m_grabber.grabbyGrab(true);
-        if (!m_shooter.isBallReady()) {
-          Leds.getInstance().setColor(Constants.Colors.kOneBall);
-        } else {
-          Leds.getInstance().setColor(Constants.Colors.kTwoBalls);
-        }
+        // if (!m_shooter.isBallReady()) {
+        //   Leds.getInstance().setColor(Constants.Colors.kOneBall);
+        // } else {
+        //   Leds.getInstance().setColor(Constants.Colors.kTwoBalls);
+        // }
         if (Timer.getFPGATimestamp() > timestamp + 0.5) {
           currentState = states.RAISEARMS;
           timestamp = Timer.getFPGATimestamp();
@@ -77,7 +84,7 @@ public class AutoGrabbyCommand extends CommandBase {
       }
       case RAISEARMS: {
         m_grabber.lowerGrabber(false);
-        if (Timer.getFPGATimestamp() > timestamp + 1.5) {
+        if (Timer.getFPGATimestamp() > timestamp + 0.9) {
           currentState = states.OPENGRABBER;
         }
         break;
@@ -101,6 +108,11 @@ public class AutoGrabbyCommand extends CommandBase {
   public void end(boolean interrupted) {
     //m_grabber.grabbyGrab(false);
     m_grabber.lowerGrabber(false);
+    if (m_shooter.isBallReady() && m_grabber.ballAtGrabber()) {
+      Leds.getInstance().setColor(Constants.Colors.kTwoBalls);
+    } else if (Leds.getInstance().getColor() != Constants.Colors.kHang) {
+      Leds.getInstance().resetColor();
+    }
   }
 
   // Returns true when the command should end.

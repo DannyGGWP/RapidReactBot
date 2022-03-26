@@ -54,7 +54,7 @@ public class ManualShooter extends CommandBase {
       }
       case RAMPWHEEL: {
         m_shooter.onWheel();
-        if (m_shooter.wheelSpin() > Constants.kSetPoint - 100) {
+        if (m_shooter.getWheelSpeed1() > Constants.kShooter1SetPoint && m_shooter.getWheelSpeed2() > Constants.kShooter2SetPoint - 100) {
           timestamp = Timer.getFPGATimestamp();
           currentState = states.RAISETOT;
         }

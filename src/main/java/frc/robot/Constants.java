@@ -22,7 +22,8 @@ public final class Constants {
     public static final int kMotorFR = 3;
     public static final int kMotorBR = 4;
     public static final int kPCM = 52;
-    public static final int kshooterSpark = 7;
+    public static final int kShooterSpark1 = 7;
+    public static final int kShooterSpark2 = 10;
     public static final int kHangerOneSpark = 8;
     public static final int kHangerTwoSpark = 9;
 
@@ -37,7 +38,8 @@ public final class Constants {
     public static final int kSenseyGrabby = 0;
     public static final int kSenseyShooty = 1;
     public static final int kTOTSwitch = 6;
-    public static final int kSetPoint = 4500;
+    public static final int kShooter1SetPoint = 3300;
+    public static final int kShooter2SetPoint = 5000;
     public static final int kreverseSetPoint = -1000;
     public static final int kslowSpeed = 1500;
     public static final double kIdleSpeed = 0.1;
@@ -82,7 +84,7 @@ public final class Constants {
         public static final double kRampRate = 0.25; 
     }
     public final class LimeLight {
-        public static final double kDriveP = 0.45; 
+        public static final double kDriveP = 0.45;
         public static final double kSteerP = 0.03;
         public static final double kDesiredTarget = 15.0;
         public static final double kMaxDrive = 0.65;

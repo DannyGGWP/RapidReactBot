@@ -110,5 +110,7 @@ public class Grabber extends SubsystemBase {
     }
   }
   
-
+  public boolean isClosed() {
+    return m_grabbySolenoid.get();
+  }
 }

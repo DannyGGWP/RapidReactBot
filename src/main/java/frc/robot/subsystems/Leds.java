@@ -34,6 +34,10 @@ public class Leds extends SubsystemBase {
     m_colorValue = colorValue;
   }
 
+  public double getColor() {
+    return m_colorValue;
+  }
+
   public void resetColor() {
     Leds.getInstance().setColor(m_isRedAlliance ? Constants.Colors.kRed : Constants.Colors.kBlue);
   }

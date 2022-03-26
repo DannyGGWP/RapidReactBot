@@ -28,8 +28,10 @@ public class Shooter extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-private CANSparkMax shooterMotor; 
-private SparkMaxPIDController m_pPidController;
+private CANSparkMax shooterMotor1; 
+private CANSparkMax shooterMotor2;
+private SparkMaxPIDController m_PidController1;
+private SparkMaxPIDController m_PidController2;
 public double kP,kI,kD,kIZ, kFF,kMaxOutput, kMinOutput, kMaxRPM;
 private Solenoid m_shootySolenoid;
 private DigitalInput m_shooterSensor;
@@ -39,38 +41,76 @@ private Debouncer m_totDebouncer;
 
 public Shooter(){
 
-  shooterMotor = new CANSparkMax(Constants.kshooterSpark, MotorType.kBrushless);
-  shooterMotor.setInverted(false);
-  shooterMotor.setClosedLoopRampRate(0.25);
-  m_pPidController = shooterMotor.getPIDController();
+  shooterMotor1 = new CANSparkMax(Constants.kShooterSpark1, MotorType.kBrushless);
+  shooterMotor1.setInverted(false);
+  shooterMotor1.setClosedLoopRampRate(0.25);
+  shooterMotor2 = new CANSparkMax(Constants.kShooterSpark2, MotorType.kBrushless);
+  shooterMotor2.setInverted(false);
+  shooterMotor2.setClosedLoopRampRate(0.25);
+  m_PidController1 = shooterMotor1.getPIDController();
+  m_PidController2 = shooterMotor2.getPIDController();
   //kP = 5e-5;
-  kP = 0.01;
+  // kP = 0.01;
+  // kI = 0.0;
+  // kD = 1.0;
+  kP = 0.0;
   kI = 0.0;
-  kD = 1.0; 
+  kD = 0.0;
   //kI = 3e-7;
   //kD = 0.008;
   kIZ = 0;
-  kFF = 0.05;
+  // kFF = 0.01;
+  kFF = 0.0002;
   kMaxOutput = 1;
   kMinOutput = -1;
-  kMaxRPM = 5700; 
-  m_pPidController.setP(kP);
-  m_pPidController.setI(kI);
-  m_pPidController.setD(kD);
-  m_pPidController.setIZone(kIZ);
-  m_pPidController.setFF(kFF);
-  m_pPidController.setOutputRange(kMinOutput, kMaxOutput);
+  kMaxRPM = 5700;
+
+  m_PidController1.setP(kP);
+  m_PidController1.setI(kI);
+  m_PidController1.setD(kD);
+  m_PidController1.setIZone(kIZ);
+  m_PidController1.setFF(kFF);
+  m_PidController1.setOutputRange(kMinOutput, kMaxOutput);
+
+  m_PidController2.setP(kP);
+  m_PidController2.setI(kI);
+  m_PidController2.setD(kD);
+  m_PidController2.setIZone(kIZ);
+  m_PidController2.setFF(kFF);
+  m_PidController2.setOutputRange(kMinOutput, kMaxOutput);
+
   m_shootySolenoid = new Solenoid(Constants.kPCM, PneumaticsModuleType.CTREPCM, Constants.kShootySolenoidIndex);
   m_shooterSensor = new DigitalInput(Constants.kSenseyShooty);
   m_totSwitch = new DigitalInput(Constants.kTOTSwitch);
   m_totDebouncer = new Debouncer(0.5,DebounceType.kBoth);
+
+  SmartDashboard.putNumber("Shooter P", kP);
+  SmartDashboard.putNumber("Shooter I", kI);
+  SmartDashboard.putNumber("Shooter D", kD);
+  SmartDashboard.putNumber("ShooterFF", kFF);
 }
   @Override 
   public void periodic(){
-    SmartDashboard.putNumber("Wheel Speed", shooterMotor.getEncoder().getVelocity()); 
-    SmartDashboard.putNumber("Wheel Motor", shooterMotor.get());
+    SmartDashboard.putNumber("Big Wheel Speed", shooterMotor1.getEncoder().getVelocity()); 
+    SmartDashboard.putNumber("Big Wheel Motor", shooterMotor1.get());
+    SmartDashboard.putNumber("Small Wheel Speed", shooterMotor2.getEncoder().getVelocity()); 
+    SmartDashboard.putNumber("Small Wheel Motor", shooterMotor2.get());
     SmartDashboard.putBoolean("TOT Raised", isTOTRaised());
 
+    kP = SmartDashboard.getNumber("Shooter P", 0.0);
+    kI = SmartDashboard.getNumber("Shooter I", 0.0);
+    kD = SmartDashboard.getNumber("Shooter D", 0.0);
+    kFF = SmartDashboard.getNumber("ShooterFF", 0.0002);
+
+    m_PidController1.setP(kP);
+    m_PidController1.setI(kI);
+    m_PidController1.setD(kD);
+    m_PidController1.setFF(kFF);
+
+    m_PidController2.setP(kP);
+    m_PidController2.setI(kI);
+    m_PidController2.setD(kD);
+    m_PidController2.setFF(kFF);
     //idleSpin();
   }
   @Override
@@ -81,7 +121,7 @@ public Shooter(){
   public void idleSpin(){
     if (!m_isRunning) {
       if(isBallReady()) {
-         shooterMotor.set(Constants.kIdleSpeed);
+         shooterMotor1.set(Constants.kIdleSpeed);
         //m_pPidController.setReference(Constants.kIdleSpeed, ControlType.kVelocity);
       } else {
         offWheel();
@@ -90,19 +130,24 @@ public Shooter(){
   }
 
   public void onWheel(){
-    m_pPidController.setReference(Constants.kSetPoint, ControlType.kVelocity);
+    m_PidController1.setReference(Constants.kShooter1SetPoint, ControlType.kVelocity);
+    shooterMotor2.set(1.0);
     m_isRunning = true;
     //shooterMotor.set(0.1); 
   }
 
   public void offWheel(){
-    shooterMotor.stopMotor();
+    shooterMotor1.stopMotor();
+    shooterMotor2.stopMotor();
     m_isRunning = false;
   }
 
-  public double wheelSpin(){
-    // TODO figure out methods
-    return shooterMotor.getEncoder().getVelocity();
+  public double getWheelSpeed1(){
+    return shooterMotor1.getEncoder().getVelocity();
+  }
+
+  public double getWheelSpeed2(){
+    return shooterMotor2.getEncoder().getVelocity();
   }
 
   public void raiseTOT(boolean raise){
@@ -113,7 +158,7 @@ public Shooter(){
     return m_totDebouncer.calculate(m_shooterSensor.get());
   }
   public void reverse(){
-    m_pPidController.setReference(Constants.kreverseSetPoint, ControlType.kVelocity);
+    m_PidController1.setReference(Constants.kreverseSetPoint, ControlType.kVelocity);
     m_isRunning = true;
     //shooterMotor.set(-0.1);
   }

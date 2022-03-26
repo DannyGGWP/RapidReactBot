@@ -59,7 +59,7 @@ public class ShootyCommand extends CommandBase {
       case RAMPWHEEL: {
         Leds.getInstance().setColor(Constants.Colors.kShoot);
         m_shooter.onWheel();
-        if (m_shooter.wheelSpin() > Constants.kSetPoint - 100 && m_shooter.isBallReady()) {
+        if (m_shooter.getWheelSpeed1() > Constants.kShooter1SetPoint && m_shooter.getWheelSpeed2() > Constants.kShooter2SetPoint - 100 && m_shooter.isBallReady()) {
           timestamp = Timer.getFPGATimestamp();
           currentState = states.RAISETOT;
         }
@@ -76,7 +76,7 @@ public class ShootyCommand extends CommandBase {
       case LOWERTOT: {
         m_shooter.raiseTOT(false);
         // if (Timer.getFPGATimestamp() > timestamp + 1) {
-        if (!m_shooter.isBallReady() && m_grabber.ballAtGrabber()) {
+        if (!m_shooter.isBallReady() && m_grabber.isClosed()) {
           currentState = states.RELEASEBALL;
         } else {
           currentState = states.END;
