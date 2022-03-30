@@ -30,6 +30,7 @@ import frc.robot.commands.AutoDriveCommand;
 import frc.robot.commands.AutoGrabbyCommand;
 import frc.robot.commands.EjectBallCommand;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.GoalFinder;
 import frc.robot.commands.LongBall;
 import frc.robot.commands.ManualShooter;
 import frc.robot.commands.ShootyCommand;
@@ -115,7 +116,7 @@ public ManualShooter m_ManualShootyCommand;
 
     m_autoCommandFarLeft = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, -165, -25000);
     m_autoCommandCloseLeft = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, -145, -40000);
-    m_autoCommandCloseRight = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, -170, -20000);
+    m_autoCommandCloseRight = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, -170, -15000);
     // m_autoCommandCenter = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, 180, -50000); // Not done
 
     Leds.getInstance().setIsRedAlliance(m_isRedAlliance);
@@ -175,11 +176,8 @@ public ManualShooter m_ManualShootyCommand;
         () -> m_grabber.lowerGrabber(false)
       );
     new JoystickButton(m_xboxController, Button.kX.value)
-      .whenPressed(
-        () -> m_shooter.onWheel()
-      )
-      .whenReleased(
-        () -> m_shooter.offWheel()
+      .whileActiveOnce(
+        new GoalFinder(m_driveTrain, 0)
       );
 
       // control pannel buttons 
