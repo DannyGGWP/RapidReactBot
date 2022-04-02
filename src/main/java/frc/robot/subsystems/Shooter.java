@@ -38,6 +38,7 @@ private DigitalInput m_shooterSensor;
 private DigitalInput m_totSwitch;
 private boolean m_isRunning;
 private Debouncer m_totDebouncer; 
+private double m_setPoint1;
 
 public Shooter(){
 
@@ -65,6 +66,8 @@ public Shooter(){
   kMinOutput = -1;
   kMaxRPM = 5700;
 
+  m_setPoint1 = Constants.kShooter1SetPoint;
+
   m_PidController1.setP(kP);
   m_PidController1.setI(kI);
   m_PidController1.setD(kD);
@@ -88,6 +91,7 @@ public Shooter(){
   SmartDashboard.putNumber("Shooter I", kI);
   SmartDashboard.putNumber("Shooter D", kD);
   SmartDashboard.putNumber("ShooterFF", kFF);
+  SmartDashboard.putNumber("Big Wheel Set Point", m_setPoint1);
 }
   @Override 
   public void periodic(){
@@ -101,6 +105,7 @@ public Shooter(){
     kI = SmartDashboard.getNumber("Shooter I", 0.0);
     kD = SmartDashboard.getNumber("Shooter D", 0.0);
     kFF = SmartDashboard.getNumber("ShooterFF", 0.0002);
+    m_setPoint1 = SmartDashboard.getNumber("Big Wheel Set Point", Constants.kShooter1SetPoint);
 
     m_PidController1.setP(kP);
     m_PidController1.setI(kI);
@@ -130,7 +135,7 @@ public Shooter(){
   }
 
   public void onWheel(){
-    m_PidController1.setReference(Constants.kShooter1SetPoint, ControlType.kVelocity);
+    m_PidController1.setReference(m_setPoint1, ControlType.kVelocity);
     shooterMotor2.set(1.0);
     m_isRunning = true;
     //shooterMotor.set(0.1); 

@@ -134,7 +134,10 @@ public ManualShooter m_ManualShootyCommand;
     m_driveTrain.setDefaultCommand(
       new RunCommand(
         () -> 
-          m_driveTrain.drive(m_xboxController.getLeftX(),-m_xboxController.getLeftY()), m_driveTrain
+          m_driveTrain.drive(
+            m_xboxController.getLeftX(),
+            -m_xboxController.getLeftY()
+          ), m_driveTrain
         )
         );
   }
@@ -156,7 +159,12 @@ public ManualShooter m_ManualShootyCommand;
     new JoystickButton(m_xboxController, Button.kA.value)
       .whileActiveOnce(m_grabCommand);
     new JoystickButton(m_xboxController, Button.kY.value)
-      .whileActiveOnce(new EjectBallCommand(m_shooter, m_grabber));
+      .whenPressed(
+        new InstantCommand(m_driveTrain::enableTurbo, m_driveTrain)
+      )
+      .whenReleased(
+        new InstantCommand(m_driveTrain::disableTurbo, m_driveTrain)
+      );
     new JoystickButton(m_xboxController, Button.kB.value)
       .whileActiveOnce(
         new TargetFinder(m_driveTrain, Constants.LimeLight.kDriveP)
@@ -177,7 +185,7 @@ public ManualShooter m_ManualShootyCommand;
       );
     new JoystickButton(m_xboxController, Button.kX.value)
       .whileActiveOnce(
-        new GoalFinder(m_driveTrain, 0)
+        new GoalFinder(m_driveTrain, Constants.LimeLight.kGoalDriveP, true)
       );
 
       // control pannel buttons 

@@ -37,8 +37,9 @@ public final class Constants {
     public static final int kPickupSolenoidIndex = 5;
     public static final int kSenseyGrabby = 0;
     public static final int kSenseyShooty = 1;
+    public static final int kGrabberRaised = 5;
     public static final int kTOTSwitch = 6;
-    public static final int kShooter1SetPoint = 3300;
+    public static final double kShooter1SetPoint = 3300;
     public static final int kShooter2SetPoint = 5000;
     public static final int kreverseSetPoint = -1000;
     public static final int kslowSpeed = 1500;
@@ -86,8 +87,11 @@ public final class Constants {
     public final class LimeLight {
         public static final double kDriveP = 0.45;
         public static final double kSteerP = 0.03;
+        public static final double kGoalSteerP = 0.02;
+        public static final double kGoalDriveP = 0.05;
         public static final double kDesiredTarget = 15.0;
         public static final double kMaxDrive = 0.65;
+        public static final double kGoalMaxDrive = 0.5;
         public static final double kMinSpeed = 0.05; 
     }
     public final class Colors {

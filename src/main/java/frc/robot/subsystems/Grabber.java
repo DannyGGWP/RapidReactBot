@@ -25,6 +25,7 @@ public class Grabber extends SubsystemBase {
   private Solenoid m_grabbySolenoid;
   private Solenoid m_pickupSolenoid;
   private DigitalInput m_grabberSensor;
+  private DigitalInput m_grabberRaisedSensor;
   private boolean m_isRedAlliance;
   private Color m_red;
   private Color m_blue;
@@ -47,6 +48,7 @@ public class Grabber extends SubsystemBase {
     m_colorMatcher.addColorMatch(m_blue);
     m_colorMatcher.addColorMatch(m_floor);
     m_grabberSensor = new DigitalInput(Constants.kSenseyGrabby);
+    m_grabberRaisedSensor = new DigitalInput(Constants.kGrabberRaised);
     m_isRedAlliance = DriverStation.getAlliance() == DriverStation.Alliance.Red;
   }
 
@@ -112,5 +114,9 @@ public class Grabber extends SubsystemBase {
   
   public boolean isClosed() {
     return m_grabbySolenoid.get();
+  }
+
+  public boolean grabberRaised() {
+    return !m_grabberRaisedSensor.get();
   }
 }

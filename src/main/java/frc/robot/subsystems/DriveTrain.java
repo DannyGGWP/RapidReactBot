@@ -40,6 +40,8 @@ public class DriveTrain extends SubsystemBase {
 
   private final DifferentialDriveOdometry m_odometry; 
 
+  private boolean m_turbo;
+
   /** Creates a new DriveTrain. */
   public DriveTrain() {
     m_motorFL = new WPI_TalonFX(Constants.kMotorFL);
@@ -97,6 +99,7 @@ public class DriveTrain extends SubsystemBase {
     m_gyro = new AHRS(Port.kUSB);
     resetEncoders();
     m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d()); 
+    m_turbo = false;
   }
 
   public void enableMotorBreak()
@@ -149,9 +152,11 @@ public void resetHeading(){
   public void drive(double xSpeed, double zRotation) {
     SmartDashboard.putNumber("Arcade Drive X Speed", xSpeed);
     SmartDashboard.putNumber("Arcade Drive Z Rotation", zRotation);
-    // m_differentialDrive.arcadeDrive(Math.abs(xSpeed) < Constants.kDriveThreshold ? xSpeed : Constants.kDriveReduction, Math.abs(zRotation) < Constants.kDriveThreshold ? zRotation : Constants.kDriveReduction);
-    m_differentialDrive.arcadeDrive(Math.signum(xSpeed) * Math.pow(xSpeed, 2), Math.signum(zRotation) * Math.pow(zRotation, 2), false);
-    //m_differentialDrive.arcadeDrive(xSpeed, zRotation, squareInputs);
+    if (!m_turbo) {
+      m_differentialDrive.arcadeDrive(xSpeed * 0.80, zRotation * 0.80);
+    } else {
+      m_differentialDrive.arcadeDrive(xSpeed, zRotation);
+    }
   }
   public void driveRaw(double zRotation, double xSpeed) {
     m_differentialDrive.arcadeDrive(zRotation,xSpeed, false);
@@ -197,5 +202,13 @@ public void resetHeading(){
 
     // Update the pose
     m_odometry.update(gyroAngle, leftDistance, rightDistance);
+  }
+
+  public void enableTurbo() {
+    m_turbo = true;
+  }
+
+  public void disableTurbo() {
+    m_turbo = false;
   }
 }

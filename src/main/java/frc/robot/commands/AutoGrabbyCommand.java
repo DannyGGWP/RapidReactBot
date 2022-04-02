@@ -84,7 +84,7 @@ public class AutoGrabbyCommand extends CommandBase {
       }
       case RAISEARMS: {
         m_grabber.lowerGrabber(false);
-        if (Timer.getFPGATimestamp() > timestamp + 0.9) {
+        if (m_grabber.grabberRaised() || Timer.getFPGATimestamp() > timestamp + 0.9) {
           currentState = states.OPENGRABBER;
         }
         break;
