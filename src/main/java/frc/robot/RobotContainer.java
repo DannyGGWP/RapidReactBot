@@ -312,7 +312,7 @@ public ManualShooter m_ManualShootyCommand;
     // return m_autoCommand;
     if (panel.getRawButton(Constants.kAutoSwitchOne)) {
       if (panel.getRawButton(Constants.kAutoBallSwitch)) {
-        return m_autoCommandFarLeft.andThen(new LongBall(m_driveTrain, 80, -35000, 80000, m_grabber, m_shooter)); // Turn right
+        return m_autoCommandFarLeft.andThen(new LongBall(m_driveTrain, 80, -35000, 100000, m_grabber, m_shooter)); // Turn right
       }
       return m_autoCommandFarLeft;
     } else if (panel.getRawButton(Constants.kAutoSwitchTwo)) {
@@ -322,7 +322,7 @@ public ManualShooter m_ManualShootyCommand;
       return m_autoCommandCloseLeft;
     } else if (panel.getRawButton(Constants.kAutoSwitchThree)) {
       if (panel.getRawButton(Constants.kAutoBallSwitch)) {
-        return m_autoCommandCloseRight.andThen(new LongBall(m_driveTrain, -80, -35000, 85000, m_grabber, m_shooter)); // Turn left
+        return m_autoCommandCloseRight.andThen(new LongBall(m_driveTrain, -80, -35000, 100000, m_grabber, m_shooter)); // Turn left
       }
       return m_autoCommandCloseRight;
     } else if (panel.getRawButton(Constants.kAautoSwitchFour)) {
