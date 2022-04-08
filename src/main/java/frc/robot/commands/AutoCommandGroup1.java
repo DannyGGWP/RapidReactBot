@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Grabber;
 import frc.robot.subsystems.Shooter;
@@ -46,7 +47,7 @@ public class AutoCommandGroup1 extends SequentialCommandGroup {
           new TargetFinder(m_driveTrain, 0.3)
         )
       ) ,
-      new AutoDriveCommand(m_driveTrain, reverseDistance, 0.4) , // 30000 less that travelled ~150000
+      // new AutoDriveCommand(m_driveTrain, reverseDistance, 0.4) , // 30000 less that travelled ~150000
       new ParallelRaceGroup(
         new WaitCommand(2),
         // new DelayCommand(1),
@@ -59,6 +60,7 @@ public class AutoCommandGroup1 extends SequentialCommandGroup {
           4
         )
       ),
+      new GoalFinder(drive, Constants.LimeLight.kGoalDriveP, true),
       new ShootyCommand(shooter, grabber)
     );
   }

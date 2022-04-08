@@ -114,8 +114,8 @@ public ManualShooter m_ManualShootyCommand;
     m_ManualShootyCommand=new ManualShooter(m_shooter, m_grabber);
     m_isRedAlliance = DriverStation.getAlliance() == DriverStation.Alliance.Red;
 
-    m_autoCommandFarLeft = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, -165, -25000);
-    m_autoCommandCloseLeft = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, -145, -40000);
+    m_autoCommandFarLeft = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, 170, -25000);
+    m_autoCommandCloseLeft = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, 165, -40000);
     m_autoCommandCloseRight = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, -170, -15000);
     // m_autoCommandCenter = new AutoCommandGroup1(m_grabber, m_shooter, m_driveTrain, 180, -50000); // Not done
 
