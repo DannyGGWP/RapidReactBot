@@ -57,6 +57,7 @@ public class Grabber extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putString("Color", stringColor());
     SmartDashboard.putBoolean("Ball Present", m_grabberSensor.get());
+    SmartDashboard.putBoolean("Grabber Open", !m_grabbySolenoid.get());
   }
 
   public void setIsRedAlliance(boolean red) {

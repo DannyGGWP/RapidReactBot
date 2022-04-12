@@ -4,9 +4,7 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
@@ -49,7 +47,6 @@ public class AutoCommandGroup1 extends SequentialCommandGroup {
           new TargetFinder(m_driveTrain, 0.3)
         )
       ) ,
-
       // new AutoDriveCommand(m_driveTrain, reverseDistance, 0.4) , // 30000 less that travelled ~150000
       new ParallelRaceGroup(
         new WaitCommand(2),
@@ -63,11 +60,12 @@ public class AutoCommandGroup1 extends SequentialCommandGroup {
           4
         )
       ),
-      new ConditionalCommand(
-        new GoalFinder(drive, Constants.LimeLight.kGoalDriveP, true),
-        new AutoDriveCommand(m_driveTrain, reverseDistance, 0.4),
-        NetworkTableInstance.getDefault().getTable("limelight-goal").getEntry("tv").getBoolean(false)
-      ),
+      new GoalFinder(drive, Constants.LimeLight.kGoalDriveP, true),
+      // new ConditionalCommand(
+      //   new GoalFinder(drive, Constants.LimeLight.kGoalDriveP, true),
+      //   new InstantCommand(drive::resetEncoders, drive).andThen(new AutoDriveCommand(m_driveTrain, reverseDistance, 0.4)),
+      //   NetworkTableInstance.getDefault().getTable("limelight-goal").getEntry("tv").getDouble(0) < 1.0
+      // ),
       new ShootyCommand(shooter, grabber)
     );
   }
